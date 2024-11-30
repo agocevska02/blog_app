@@ -1,7 +1,7 @@
 package com.example.blog_app.service.impl;
 
-
 import com.example.blog_app.model.Category;
+import com.example.blog_app.model.dto.CategoryDto;
 import com.example.blog_app.repository.CategoryRepository;
 import com.example.blog_app.service.CategoryService;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements  CategoryService {
+public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
@@ -17,21 +17,25 @@ public class CategoryServiceImpl implements  CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-
     @Override
-    public void addCategory(String name) {
-        Category category = new Category(name);
-        categoryRepository.save(category);
+    public Category addCategory(CategoryDto categoryDto) {
+        Category category = new Category(categoryDto.getName());
+        return categoryRepository.save(category);
     }
 
     @Override
-    public Long getCategoryId(String name) {
-        return categoryRepository.findByName(name).getId();
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
     }
 
     @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    public Category updateCategory(Long id, CategoryDto categoryDto) {
+        Category category = getCategoryById(id);
+        if (category != null) {
+            category.setName(categoryDto.getName());
+            categoryRepository.save(category);
+        }
+        return category;
     }
 
     @Override
@@ -40,21 +44,18 @@ public class CategoryServiceImpl implements  CategoryService {
     }
 
     @Override
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public Category getCategoryByName(String name) {
         return categoryRepository.findByName(name);
     }
 
     @Override
-    public void deleteCategory(Long id) {
-        categoryRepository.deleteById(id);
+    public Long getCategoryIdByName(String name) {
+        Category category = categoryRepository.findByName(name);
+        return category != null ? category.getId() : null;
     }
-    public Category updateCategory(Long id, String name){
-        Category category = getCategoryById(id);
-        if(category!=null){
-            category.setName(name);
-            categoryRepository.save(category);
-        }
-        return category;
-    }
-
 }

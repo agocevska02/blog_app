@@ -1,6 +1,7 @@
 package com.example.blog_app.service.impl;
 
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.dto.BlogDto;
 import com.example.blog_app.repository.BlogRepository;
 import com.example.blog_app.repository.CategoryRepository;
 import com.example.blog_app.service.BlogService;
@@ -20,30 +21,39 @@ public class BlogServiceImpl implements BlogService {
         this.categoryRepository = categoryRepository;
     }
 
+
     @Override
-    public void addBlog(String title, String content, Long category_id, String author, String imageUrl) {
-        blogRepository.save(new Blog(title, content, categoryRepository.findById(category_id).orElse(null), author, imageUrl));
+    public Blog addBlog(BlogDto blogDto) {
+        Blog blog = new Blog(
+                blogDto.getTitle(),
+                blogDto.getContent(),
+                categoryRepository.findById(blogDto.getCategoryId()).orElse(null),
+                blogDto.getAuthor(),
+                blogDto.getImageUrl()
+        );
+        blog.setCreatedOn(LocalDateTime.now());
+        blogRepository.save(blog);
+        return blog;
     }
 
     @Override
     public void deleteBlog(Long id) {
-        Blog blog = getBlogById(id);
         blogRepository.deleteById(id);
-
     }
 
     @Override
-    public void updateBlog(Long id, String title, String content, Long category_id, String author, String imageUrl) {
-        Blog blog = getBlogById(id);
+    public Blog updateBlog(Long id, BlogDto blogDto) {
+        Blog blog = blogRepository.findById(id).orElse(null);
         if (blog != null) {
-            blog.setTitle(title);
-            blog.setContent(content);
-            blog.setCategory(categoryRepository.findById(category_id).orElse(null));
-            blog.setAuthor(author);
-            blog.setImageUrl(imageUrl);
+            blog.setTitle(blogDto.getTitle());
+            blog.setContent(blogDto.getContent());
+            blog.setCategory(categoryRepository.findById(blogDto.getCategoryId()).orElse(null));
+            blog.setAuthor(blogDto.getAuthor());
+            blog.setImageUrl(blogDto.getImageUrl());
             blog.setUpdatedOn(LocalDateTime.now());
             blogRepository.save(blog);
         }
+        return blog;
     }
 
     @Override
@@ -53,12 +63,12 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog getBlogById(Long id) {
-        return blogRepository.findById(id).orElse(null);
+       return blogRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Blog> getBlogsByCategoryId(Long category_id) {
-        return blogRepository.findByCategoryId(category_id);
+    public List<Blog> getBlogsByCategoryId(Long categoryId) {
+        return blogRepository.findByCategoryId(categoryId);
     }
 
     @Override
