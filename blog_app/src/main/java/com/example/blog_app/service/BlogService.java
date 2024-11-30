@@ -1,18 +1,16 @@
 package com.example.blog_app.service;
 
 import com.example.blog_app.model.Blog;
-import com.example.blog_app.model.Category;
-import org.springframework.web.multipart.MultipartFile;
+import com.example.blog_app.model.dto.BlogDto;
 
 import java.util.List;
 
 public interface BlogService {
-    void addBlog(String title, String content, Long category_id, String author, String imageUrl);
+    Blog addBlog(BlogDto blogDto);
     void deleteBlog(Long id);
-    void updateBlog(Long id,String title, String content, Long category_id, String author, String imageUrl);
+    Blog updateBlog(Long id, BlogDto blogDto);
     List<Blog> getAllBlogs();
     Blog getBlogById(Long id);
-    List<Blog> getBlogsByCategoryId(Long category_id);
+    List<Blog> getBlogsByCategoryId(Long categoryId);
     List<Blog> getBlogsByAuthor(String author);
-
 }
