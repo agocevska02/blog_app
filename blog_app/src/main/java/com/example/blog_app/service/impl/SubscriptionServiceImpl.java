@@ -20,7 +20,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Subscription addSubscription(@RequestBody SubscriptionDto subscriptionDto) {
-       return  subscriptionRepository.save(new Subscription(subscriptionDto.getEmail()));
+        return subscriptionRepository.save(new Subscription(subscriptionDto.getEmail()));
 
     }
 

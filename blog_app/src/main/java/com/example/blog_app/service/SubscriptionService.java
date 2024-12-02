@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface SubscriptionService {
     Subscription addSubscription(SubscriptionDto subscriptionDto);
-    void removeSubscription(SubscriptionDto subscriptionDto);
-    List<Subscription> getAllSubscriptions();
 
+    void removeSubscription(SubscriptionDto subscriptionDto);
+
+    List<Subscription> getAllSubscriptions();
 }

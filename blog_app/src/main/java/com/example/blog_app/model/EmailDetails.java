@@ -12,7 +12,7 @@ public class EmailDetails {
 
     private String recipient;
     private String subject;
-    private String msgBody;
+    private String message;
     private String attachment;
     private String link;
 }

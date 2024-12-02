@@ -7,10 +7,16 @@ import java.util.List;
 
 public interface BlogService {
     Blog addBlog(BlogDto blogDto);
+
     void deleteBlog(Long id);
+
     Blog updateBlog(Long id, BlogDto blogDto);
+
     List<Blog> getAllBlogs();
+
     Blog getBlogById(Long id);
+
     List<Blog> getBlogsByCategoryId(Long categoryId);
+
     List<Blog> getBlogsByAuthor(String author);
 }

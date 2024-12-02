@@ -15,16 +15,14 @@ import java.util.List;
 public class BlogController {
 
     private final BlogService blogService;
-    private final CategoryService categoryService;
 
-    public BlogController(BlogService blogService, CategoryService categoryService) {
+    public BlogController(BlogService blogService) {
         this.blogService = blogService;
-        this.categoryService = categoryService;
     }
 
     @GetMapping
     public List<Blog> getAllBlogs() {
-       return blogService.getAllBlogs();
+        return blogService.getAllBlogs();
     }
 
     @PostMapping("/add")
@@ -47,7 +45,7 @@ public class BlogController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Blog> getBlogById(@PathVariable Long id) {
-       return ResponseEntity.ok(blogService.getBlogById(id));
+        return ResponseEntity.ok(blogService.getBlogById(id));
     }
 
     @GetMapping("/category/{category_id}")

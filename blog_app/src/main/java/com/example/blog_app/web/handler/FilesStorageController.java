@@ -8,22 +8,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.util.Map;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/api/files")
 public class FilesStorageController {
 
     private final FilesStorageServiceImpl filesStorageService;
+
     public FilesStorageController(FilesStorageServiceImpl fs) {
         super();
         this.filesStorageService = fs;
     }
+
     @GetMapping
     public ResponseEntity<?> getFilesList() {
         return new ResponseEntity<>(filesStorageService.getFilesList(), HttpStatus.OK);
     }
-
 
     @PostMapping
     public ResponseEntity<?> uploadFile(@RequestBody MultipartFile file) {

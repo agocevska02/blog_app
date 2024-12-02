@@ -63,7 +63,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Blog getBlogById(Long id) {
-       return blogRepository.findById(id).orElse(null);
+        return blogRepository.findById(id).orElse(null);
     }
 
     @Override

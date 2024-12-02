@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 @RestController
 @RequestMapping("/api/subscriptions")
 public class SubscriptionController {
@@ -24,13 +25,13 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptions);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Subscription> addSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         Subscription createdSubscription = subscriptionService.addSubscription(subscriptionDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSubscription);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> removeSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         subscriptionService.removeSubscription(subscriptionDto);
         return ResponseEntity.ok().build();
