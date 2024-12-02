@@ -7,8 +7,8 @@ const Test = () => {
   useEffect(() => {
     const getBlogs = async () => {
       try {
-        const fetchedblogs = await BlogService.getAllBlogs();
-        setBlogs(fetchedblogs);
+        const fetchedBlogs = await BlogService.getAllBlogs();
+        setBlogs(fetchedBlogs);
       } catch (error) {
         console.log(error);
       }

@@ -3,7 +3,7 @@
 import { BLOG_API_URL } from "../constants";
 import HttpClient from "./http-client";
 
-class BlogClient extends HttpClient {
+class BlogAppClient extends HttpClient {
   apiUrl: string;
   requestHeaders: Record<string, string>;
   contentTypeHeader: Record<string, string>;
@@ -18,7 +18,7 @@ class BlogClient extends HttpClient {
     this.requestHeaders = {
       Accept: "application/json",
       "Accept-Language": "en-US,en;q=0.5",
-      
+
       //   'Authorization': jwt ? `Bearer ${jwt}` : '',
     };
 
@@ -209,4 +209,4 @@ class BlogClient extends HttpClient {
   }
 }
 
-export const BlogClientInstance = new BlogClient();
+export const BlogAppClientInstance = new BlogAppClient();
