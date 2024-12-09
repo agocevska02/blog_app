@@ -23,13 +23,13 @@ export class BlogServices {
   };
 
   getBlogsByCategory = async (categoryId: string) => {
-    return await BlogAppClientInstance.get<BlogDto[]>(
+    return await BlogAppClientInstance.get<Blog[]>(
       `blogs/category/${categoryId}`
     );
   };
 
   getBlogsByAuthor = async (author: string) => {
-    return await BlogAppClientInstance.get<BlogDto[]>(`blogs/author/${author}`);
+    return await BlogAppClientInstance.get<Blog[]>(`blogs/author/${author}`);
   };
 }
 

@@ -1,7 +1,7 @@
 import { Category, CategoryDto } from "../../types/Categories";
 import { BlogAppClientInstance } from "../rest-client";
 
-export class CategoryService {
+export class CategoryServices {
   getAllCategories = async () => {
     return await BlogAppClientInstance.get<Category[]>(`categories`);
   };
@@ -38,3 +38,5 @@ export class CategoryService {
     return await BlogAppClientInstance.get<string>(`categories/id/${name}`);
   };
 }
+
+export const CategoryService = new CategoryServices();

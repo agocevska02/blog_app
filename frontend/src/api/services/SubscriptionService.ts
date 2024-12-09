@@ -1,7 +1,7 @@
 import { Subscription, SubscriptionDto } from "../../types/Subscriptions";
 import { BlogAppClientInstance } from "../rest-client";
 
-export class SubscriptionService {
+export class SubscriptionServices {
   getAllSubscriptions = async () => {
     await BlogAppClientInstance.get<Subscription[]>(`subscriptions`);
   };
@@ -20,3 +20,5 @@ export class SubscriptionService {
     );
   };
 }
+
+export const SubscriptionService = new SubscriptionServices();
