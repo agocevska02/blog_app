@@ -79,7 +79,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> getMyBlogs(User author) {
+    public List<Blog> getBlogsByAuthor(User author) {
         return blogRepository.findByAuthor_Id(Long.valueOf(author.getId()));
     }
 }

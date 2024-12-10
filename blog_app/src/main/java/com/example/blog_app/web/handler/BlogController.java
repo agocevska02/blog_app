@@ -81,10 +81,10 @@ public class BlogController {
         return ResponseEntity.ok(blogs);
     }
 
-    @GetMapping("/myblogs")
+    @GetMapping("/myBlogs")
     public ResponseEntity<List<Blog>> getMyBlogs() {
         User user = userController.authenticatedUser().getBody();
-        List<Blog> blogs = blogService.getMyBlogs(user);
+        List<Blog> blogs = blogService.getBlogsByAuthor(user);
         return ResponseEntity.ok(blogs);
     }
 }
