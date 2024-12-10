@@ -5,6 +5,7 @@ import com.example.blog_app.model.dto.SubscriptionDto;
 import com.example.blog_app.service.SubscriptionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class SubscriptionController {
     }
 
     @DeleteMapping("/delete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removeSubscription(@RequestBody SubscriptionDto subscriptionDto) {
         subscriptionService.removeSubscription(subscriptionDto);
         return ResponseEntity.ok().build();

@@ -3,7 +3,9 @@ package com.example.blog_app.model.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,8 +15,5 @@ public class BlogDto {
     private String title;
     private String content;
     private Long categoryId;
-    private String author;
-    private String imageUrl;
-    private LocalDateTime createdOn;
-    private LocalDateTime updatedOn;
+    private MultipartFile file;
 }

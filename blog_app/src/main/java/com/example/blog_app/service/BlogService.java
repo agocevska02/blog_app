@@ -1,12 +1,13 @@
 package com.example.blog_app.service;
 
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
 
 import java.util.List;
 
 public interface BlogService {
-    Blog addBlog(BlogDto blogDto);
+    Blog addBlog(BlogDto blogDto, User user);
 
     void deleteBlog(Long id);
 
@@ -18,5 +19,5 @@ public interface BlogService {
 
     List<Blog> getBlogsByCategoryId(Long categoryId);
 
-    List<Blog> getBlogsByAuthor(String author);
+     List<Blog> getMyBlogs(User author);
 }

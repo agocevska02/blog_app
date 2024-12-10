@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog,Long> {
     List<Blog> findByCategoryId(Long categoryId);
-    List<Blog> findByAuthorContainingIgnoreCase(String author);
-
+    List<Blog> findByAuthor_Id(Long authorId);
 
 }

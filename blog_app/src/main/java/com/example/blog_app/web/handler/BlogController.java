@@ -1,12 +1,14 @@
 package com.example.blog_app.web.handler;
 
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
 import com.example.blog_app.service.BlogService;
-import com.example.blog_app.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,9 +17,10 @@ import java.util.List;
 public class BlogController {
 
     private final BlogService blogService;
-
-    public BlogController(BlogService blogService) {
+    private final UserController userController;
+    public BlogController(BlogService blogService, UserController userController) {
         this.blogService = blogService;
+        this.userController = userController;
     }
 
     @GetMapping
@@ -26,19 +29,43 @@ public class BlogController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Blog> addBlog(@RequestBody BlogDto blogDto) {
-        Blog createdBlog = this.blogService.addBlog(blogDto);
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Blog> addBlog(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("categoryId") Long categoryId,
+            @RequestParam("file") MultipartFile file) {
+
+        BlogDto blogDto = new BlogDto();
+        blogDto.setTitle(title);
+        blogDto.setContent(content);
+        blogDto.setCategoryId(categoryId);
+        blogDto.setFile(file);
+
+        ResponseEntity<User> user = userController.authenticatedUser();
+        Blog createdBlog = this.blogService.addBlog(blogDto, user.getBody());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(createdBlog);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBlog(@PathVariable Long id) {
         blogService.deleteBlog(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Blog> updateBlog(@PathVariable Long id, @RequestBody BlogDto blogDto) {
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Blog> updateBlog(@PathVariable Long id,@RequestParam("title") String title,
+                                           @RequestParam("content") String content,
+                                           @RequestParam("categoryId") Long categoryId,
+                                           @RequestParam("file") MultipartFile file) {
+        BlogDto blogDto = new BlogDto();
+        blogDto.setTitle(title);
+        blogDto.setContent(content);
+        blogDto.setCategoryId(categoryId);
+        blogDto.setFile(file);
         Blog updatedBlog = blogService.updateBlog(id, blogDto);
         return ResponseEntity.ok(updatedBlog);
     }
@@ -54,9 +81,10 @@ public class BlogController {
         return ResponseEntity.ok(blogs);
     }
 
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<Blog>> getBlogsByAuthor(@PathVariable String author) {
-        List<Blog> blogs = blogService.getBlogsByAuthor(author);
+    @GetMapping("/myblogs")
+    public ResponseEntity<List<Blog>> getMyBlogs() {
+        User user = userController.authenticatedUser().getBody();
+        List<Blog> blogs = blogService.getMyBlogs(user);
         return ResponseEntity.ok(blogs);
     }
 }

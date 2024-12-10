@@ -21,17 +21,18 @@ public class Blog {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    // zasega vaka ponatamu ke smenime
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User author;
     private String imageUrl;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 
-    public Blog(String title, String content, Category category, String author, String imageUrl) {
+    public Blog(String title, String content, Category category, User user, String imageUrl) {
         this.title = title;
         this.content = content;
         this.category = category;
-        this.author = author;
+        this.author = user;
         this.imageUrl = imageUrl;
         this.createdOn = LocalDateTime.now();
     }
