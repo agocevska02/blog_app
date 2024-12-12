@@ -1,5 +1,5 @@
 import { SubscriptionService } from "@/api/services/SubscriptionService";
-import { EmailValidationSchema } from "@/formik/formil-validation-schemas";
+import { EmailValidationSchema } from "@/formik/formik-validation-schemas";
 import {
   Box,
   Button,

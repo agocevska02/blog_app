@@ -18,22 +18,32 @@ import SubscriptionForm from "./components/subscriptionForm";
 const LatestBlogs = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const fetchCategories = async () => {
-      const fetchedCategories = await CategoryService.getAllCategories();
-      setCategories(fetchedCategories);
+      if (loading) return;
+      try {
+        setLoading(true);
+        const fetchedCategories = await CategoryService.getAllCategories();
+        setCategories(fetchedCategories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    fetchCategories();
+    if (categories.length === 0) {
+      fetchCategories();
+    }
   }, []);
 
   return (
     <Box>
-      <HStack justify={"center"} mt='5'>
+      <HStack justify={"center"} mt="5">
         <Heading size={"xl"}>Latest Blogs</Heading>
       </HStack>
-      <SubscriptionForm/>
+      <SubscriptionForm />
       <Tabs
         isFitted
         variant="enclosed"
@@ -58,22 +68,22 @@ const LatestBlogs = () => {
             <Tab key={category.id}>{category.name}</Tab>
           ))}
         </TabList>
-        <TabIndicator
-          height="2px"
-          bg="teal.500"
-          borderRadius="1px"
-        />
-        <TabPanels>
-          <TabPanel>
-            <BlogsPerCategory categoryId={""} />
-          </TabPanel>
-          <TabPanel>
-            <BlogsPerCategory categoryId={selectedCategoryId} />
-          </TabPanel>
-          <TabPanel>
-            <BlogsPerCategory categoryId={selectedCategoryId} />
-          </TabPanel>
-        </TabPanels>
+        <TabIndicator height="2px" bg="teal.500" borderRadius="1px" />
+        {!loading && (
+          <TabPanels>
+            <TabPanel>
+              <BlogsPerCategory categoryId={""} />
+            </TabPanel>
+            {categories.length>0 &&
+              categories.map((category) => (
+                <TabPanel key={category.id}>
+                  {selectedCategoryId === category.id && (
+                    <BlogsPerCategory categoryId={category.id} />
+                  )}
+                </TabPanel>
+              ))}
+          </TabPanels>
+        )}
       </Tabs>
     </Box>
   );

@@ -36,6 +36,7 @@ export default function DesktopNavBar() {
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
+            onClick={() => (window.location.href = "/")}
           >
             Logo
           </Text>
@@ -58,7 +59,7 @@ export default function DesktopNavBar() {
             fontSize={"sm"}
             fontWeight={400}
             variant={"link"}
-            href={"#"}
+            href={"/login"}
           >
             Sign In
           </Button>
@@ -69,7 +70,7 @@ export default function DesktopNavBar() {
             fontWeight={600}
             color={"white"}
             bg={"teal.600"}
-            href={"#"}
+            href={"/signup"}
             _hover={{
               bg: "pink.300",
             }}
