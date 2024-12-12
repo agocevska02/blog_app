@@ -17,7 +17,7 @@ import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 export default function DesktopNavBar() {
   const { colorMode, toggleColorMode } = useColorMode();
-
+  const user = localStorage.getItem("user") || null;
   return (
     <Box>
       <Flex
@@ -54,29 +54,47 @@ export default function DesktopNavBar() {
           direction={"row"}
           spacing={6}
         >
+          {!user ? (
+            <>
+              <Button
+                as={"a"}
+                fontSize={"sm"}
+                fontWeight={400}
+                variant={"link"}
+                href={"/login"}
+              >
+                Sign In
+              </Button>
+              <Button
+                as={"a"}
+                display={{ base: "none", md: "inline-flex" }}
+                fontSize={"sm"}
+                fontWeight={600}
+                color={"white"}
+                bg={"teal.600"}
+                href={"/signup"}
+                _hover={{
+                  bg: "pink.300",
+                }}
+              >
+                Sign Up
+              </Button>
+            </>
+          ) : 
           <Button
-            as={"a"}
-            fontSize={"sm"}
-            fontWeight={400}
-            variant={"link"}
-            href={"/login"}
-          >
-            Sign In
-          </Button>
-          <Button
-            as={"a"}
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"teal.600"}
-            href={"/signup"}
-            _hover={{
-              bg: "pink.300",
-            }}
-          >
-            Sign Up
-          </Button>
+          as={"a"}
+          display={{ base: "none", md: "inline-flex" }}
+          fontSize={"sm"}
+          fontWeight={600}
+          color={"white"}
+          bg={"teal.600"}
+          href={"/"}
+          _hover={{
+            bg: "pink.300",
+          }}
+        >
+          Log out
+        </Button>}
         </Stack>
       </Flex>
     </Box>

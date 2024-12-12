@@ -15,12 +15,14 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
+import { useNavigate } from "react-router-dom";
 
 export default function SignIn() {
   const authContext = useAuth();
   if (!authContext) {
     throw new Error("AuthContext is undefined");
   }
+  const navigate = useNavigate();
   const { login } = authContext;
   const handleSignIn = async (values: LoginDto) => {
     // try {
@@ -31,7 +33,8 @@ export default function SignIn() {
     // } catch (error) {
     //   console.error("Error during sign-in:", error);
     // }
-    login(values);
+   await login(values);
+    navigate("/");
   };
 
   return (
@@ -94,6 +97,7 @@ export default function SignIn() {
                       _hover={{
                         bg: "blue.500",
                       }}
+                      onClick={() => handleSignIn}
                     >
                       Sign in
                     </Button>
