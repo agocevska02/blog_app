@@ -1,5 +1,6 @@
 package com.example.blog_app.service.impl;
 
+import com.example.blog_app.model.User;
 import com.example.blog_app.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,7 +35,12 @@ public class JwtServiceImpl implements JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        if (userDetails instanceof User myUserDetails) {
+            extraClaims.put("role", myUserDetails.getRole());
+        }
+        return generateToken(extraClaims, userDetails);
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {

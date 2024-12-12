@@ -1,5 +1,6 @@
 package com.example.blog_app.web.handler;
 
+import com.example.blog_app.model.Role;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.LoginUserDto;
 import com.example.blog_app.model.dto.RegisterUserDto;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RestController
 public class AuthenticationController {
     private final JwtServiceImpl jwtService;
@@ -34,10 +35,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
-
+        Role role =authenticatedUser.getRole();
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
+        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime(), role);
 
         return ResponseEntity.ok(loginResponse);
     }

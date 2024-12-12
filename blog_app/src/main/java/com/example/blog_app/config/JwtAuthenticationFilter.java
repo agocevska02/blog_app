@@ -1,6 +1,7 @@
 package com.example.blog_app.config;
 
 import com.example.blog_app.service.impl.JwtServiceImpl;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,7 +71,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (Exception exception) {
+        }catch (ExpiredJwtException e) {
+            // If the token is expired, send 401 Unauthorized response to frontend
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token expired. Please log in again.");
+            return;
+        }catch (Exception exception) {
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }
