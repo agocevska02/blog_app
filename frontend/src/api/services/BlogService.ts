@@ -7,7 +7,9 @@ export class BlogServices {
   };
 
   addBlog = async (formData: FormData) => {
-    return await BlogAppClientInstance.post<Blog>(`blogs/add`, formData);
+    return await BlogAppClientInstance.post<Blog>(`blogs/add`, formData, {
+      Accept: "*/*",
+    });
   };
 
   updateBlog = async (id: string, blog: BlogDto) => {

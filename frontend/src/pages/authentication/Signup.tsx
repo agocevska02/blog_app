@@ -24,12 +24,12 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignup = async (values: RegistrationDto) => {
     try {
       const user = await AuthService.signupUser(values);
       if (user) {
-        const navigate = useNavigate();
         navigate("/login");
       }
     } catch (err) {
