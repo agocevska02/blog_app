@@ -6,8 +6,8 @@ export class BlogServices {
     return await BlogAppClientInstance.get<Blog[]>(`blogs`);
   };
 
-  addBlog = async (blog: BlogDto) => {
-    return await BlogAppClientInstance.post<Blog>(`blogs/add`, blog);
+  addBlog = async (formData: FormData) => {
+    return await BlogAppClientInstance.post<Blog>(`blogs/add`, formData);
   };
 
   updateBlog = async (id: string, blog: BlogDto) => {

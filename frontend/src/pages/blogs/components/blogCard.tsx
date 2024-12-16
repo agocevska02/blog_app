@@ -37,7 +37,7 @@ const BlogCard = ({ blog }: BlogCardProps) => {
               {blog.content}
             </Text>
             <Text color="teal.600" fontSize="2xl">
-              {blog.author}
+              {blog.author?.fullName}
             </Text>
           </Box>
         </Stack>

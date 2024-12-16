@@ -2,24 +2,38 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import LatestBlogs from "./pages/blogs";
-import SignIn from "./pages/authentication/SignIn";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Header from "./pages/header";
-import Signup from "./pages/authentication/Signup";
+import CreateBlog from "./pages/blogs/components/createBlog";
+import SignIn from "./pages/authentication/signIn";
+import Signup from "./pages/authentication/signup";
 
 function App() {
   return (
     <>
-      <Header />
       <AuthProvider>
         <Router>
+          <Header />
           <Routes>
             <Route path="/login" element={<SignIn />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<LatestBlogs />} />
             <Route
-              path="/"
+              path="/create_blog"
               element={
-                <ProtectedRoute Component={LatestBlogs} roles={["ROLE_USER"]} />
+                <ProtectedRoute
+                  Component={CreateBlog}
+                  roles={["ROLE_USER", "ROLE_ADMIN"]}
+                />
+              }
+            />
+            <Route
+              path="/my_blogs"
+              element={
+                <ProtectedRoute
+                  Component={LatestBlogs}
+                  roles={["ROLE_USER", "ROLE_ADMIN"]}
+                />
               }
             />
           </Routes>

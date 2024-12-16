@@ -17,7 +17,7 @@ import {
 import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
+const SignIn = () => {
   const authContext = useAuth();
   if (!authContext) {
     throw new Error("AuthContext is undefined");
@@ -25,15 +25,7 @@ export default function SignIn() {
   const navigate = useNavigate();
   const { login } = authContext;
   const handleSignIn = async (values: LoginDto) => {
-    // try {
-    //   console.log("Submitted values:", values);
-    //   const response = await AuthService.loginUser(values);
-    //   console.log(response.token);
-    //   TokenService.setToken(response.token);
-    // } catch (error) {
-    //   console.error("Error during sign-in:", error);
-    // }
-   await login(values);
+    await login(values);
     navigate("/");
   };
 
@@ -110,4 +102,6 @@ export default function SignIn() {
       </Stack>
     </Flex>
   );
-}
+};
+
+export default SignIn;

@@ -14,9 +14,11 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 export default function DesktopNavBar() {
   const { colorMode, toggleColorMode } = useColorMode();
+  const navigate = useNavigate();
   const user = localStorage.getItem("user") || null;
   return (
     <Box>
@@ -45,6 +47,7 @@ export default function DesktopNavBar() {
             <Navigation />
           </Flex>
         </Flex>
+
         <Button onClick={toggleColorMode} mr="4">
           {colorMode === "light" ? <MoonIcon /> : <SunIcon />}
         </Button>
@@ -80,21 +83,26 @@ export default function DesktopNavBar() {
                 Sign Up
               </Button>
             </>
-          ) : 
-          <Button
-          as={"a"}
-          display={{ base: "none", md: "inline-flex" }}
-          fontSize={"sm"}
-          fontWeight={600}
-          color={"white"}
-          bg={"teal.600"}
-          href={"/"}
-          _hover={{
-            bg: "pink.300",
-          }}
-        >
-          Log out
-        </Button>}
+          ) : (
+            <Button
+              as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"teal.600"}
+              href={"/"}
+              _hover={{
+                bg: "pink.300",
+              }}
+              onClick={() => {
+                localStorage.clear();
+                navigate("/");
+              }}
+            >
+              Log out
+            </Button>
+          )}
         </Stack>
       </Flex>
     </Box>
@@ -232,7 +240,7 @@ const NAV_ITEMS: Array<NavItem> = [
     href: "#",
   },
   {
-    label: "Hire Designers",
-    href: "#",
+    label: "Write a Blog",
+    href: "/create_blog",
   },
 ];

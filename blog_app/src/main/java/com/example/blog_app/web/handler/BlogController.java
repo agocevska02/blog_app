@@ -28,7 +28,7 @@ public class BlogController {
         return blogService.getAllBlogs();
     }
 
-    @PostMapping("/add")
+    @PostMapping(value="/add", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Blog> addBlog(
             @RequestParam("title") String title,

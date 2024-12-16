@@ -1,10 +1,10 @@
 import { Category } from "./Categories";
+import { User } from "./Users";
 
 export type BlogDto = {
   title: string;
   content: string;
   categoryId: number;
-  author: string;
   imageUrl: string;
   createdOn: string;
   updatedOn: string;
@@ -15,7 +15,7 @@ export type Blog = {
   title: string;
   content: string;
   category: Category;
-  author: string;
+  author: User;
   imageUrl: string;
   createdOn: string;
   updatedOn: string;

@@ -22,7 +22,7 @@ import { AuthService } from "@/api/services/AuthenticationService";
 import { SignupSchema } from "@/formik/formik-validation-schemas";
 import { useNavigate } from "react-router-dom";
 
-export default function Signup() {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSignup = async (values: RegistrationDto) => {
@@ -81,9 +81,7 @@ export default function Signup() {
                         <FormLabel>Full Name</FormLabel>
                         <Field name="fullName" as={Input} type="text" />
                         <Text color="red.500" fontSize="sm">
-                          {errors.fullName &&
-                            touched.fullName &&
-                            errors.fullName}
+                          {errors.fullName && touched.fullName}
                         </Text>
                       </FormControl>
                     </Box>
@@ -153,4 +151,6 @@ export default function Signup() {
       </Stack>
     </Flex>
   );
-}
+};
+
+export default Signup;

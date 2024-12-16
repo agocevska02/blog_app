@@ -13,3 +13,10 @@ export const SignupSchema = Yup.object().shape({
     .matches(/(?=.*[0-9])/, "Password must contain a number")
     .matches(/(?=.*[A-Z])/, "Password must contain an uppercase letter"),
 });
+
+export const CreateBlogSchema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  content: Yup.string().required("Content is required"),
+  categoryId: Yup.string().required("Category is required"),
+  file: Yup.mixed().required("File is required"),
+});

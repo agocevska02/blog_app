@@ -1,5 +1,3 @@
-import { CategoryService } from "@/api/services/CategoryService";
-import { Category } from "@/types/Categories";
 import {
   Box,
   Heading,
@@ -11,32 +9,14 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BlogsPerCategory from "./components/blogsPerCategory";
 import SubscriptionForm from "./components/subscriptionForm";
+import useFetchCategories from "@/hooks/useFetchCategories";
 
 const LatestBlogs = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
-    const fetchCategories = async () => {
-      if (loading) return;
-      try {
-        setLoading(true);
-        const fetchedCategories = await CategoryService.getAllCategories();
-        setCategories(fetchedCategories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (categories.length === 0) {
-      fetchCategories();
-    }
-  }, []);
+  const { categories, loading } = useFetchCategories();
 
   return (
     <Box>
@@ -74,7 +54,7 @@ const LatestBlogs = () => {
             <TabPanel>
               <BlogsPerCategory categoryId={""} />
             </TabPanel>
-            {categories.length>0 &&
+            {categories.length > 0 &&
               categories.map((category) => (
                 <TabPanel key={category.id}>
                   {selectedCategoryId === category.id && (
