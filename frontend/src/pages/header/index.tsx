@@ -243,4 +243,8 @@ const NAV_ITEMS: Array<NavItem> = [
     label: "Write a Blog",
     href: "/create_blog",
   },
+  {
+    label: "Manage Categories",
+    href: "/create_category",
+  },
 ];
