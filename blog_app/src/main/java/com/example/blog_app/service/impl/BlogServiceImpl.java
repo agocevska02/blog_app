@@ -82,4 +82,9 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> getBlogsByAuthor(User author) {
         return blogRepository.findByAuthor_Id(Long.valueOf(author.getId()));
     }
+
+    @Override
+    public List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId) {
+        return blogRepository.findByAuthor_IdAndCategoryId(Long.valueOf(author.getId()), categoryId);
+    }
 }

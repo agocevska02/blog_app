@@ -15,8 +15,9 @@ import {
 
 interface BlogCardProps {
   blog: Blog;
+  isMyBlog?: boolean;
 }
-const BlogCard = ({ blog }: BlogCardProps) => {
+const BlogCard = ({ blog, isMyBlog }: BlogCardProps) => {
   return (
     <Card maxW="sm" margin={2} width={"300px"}>
       <CardBody>
@@ -48,6 +49,13 @@ const BlogCard = ({ blog }: BlogCardProps) => {
             Read more
           </Button>
         </ButtonGroup>
+        {isMyBlog && (
+          <ButtonGroup spacing="2">
+            <Button variant="solid" colorScheme="teal">
+              Edit Blog
+            </Button>
+          </ButtonGroup>
+        )}
       </CardFooter>
     </Card>
   );

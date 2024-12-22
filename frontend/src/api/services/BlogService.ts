@@ -1,4 +1,4 @@
-import { Blog, BlogDto } from "../../types/Blogs";
+import { Blog } from "../../types/Blogs";
 import { BlogAppClientInstance } from "../rest-client";
 
 export class BlogServices {
@@ -12,8 +12,14 @@ export class BlogServices {
     });
   };
 
-  updateBlog = async (id: string, blog: BlogDto) => {
-    return await BlogAppClientInstance.put<Blog>(`blogs/update/${id}`, blog);
+  updateBlog = async (id: string, formData: FormData) => {
+    return await BlogAppClientInstance.put<Blog>(
+      `blogs/update/${id}`,
+      formData,
+      {
+        Accept: "*/*",
+      }
+    );
   };
 
   deleteBlog = async (id: string) => {
@@ -21,7 +27,7 @@ export class BlogServices {
   };
 
   getBlogById = async (id: string) => {
-    return await BlogAppClientInstance.get<BlogDto>(`blogs/${id}`);
+    return await BlogAppClientInstance.get<Blog>(`blogs/${id}`);
   };
 
   getBlogsByCategory = async (categoryId: string) => {
@@ -30,8 +36,14 @@ export class BlogServices {
     );
   };
 
-  getBlogsByAuthor = async (author: string) => {
-    return await BlogAppClientInstance.get<Blog[]>(`blogs/author/${author}`);
+  getMyBlogs = async () => {
+    return await BlogAppClientInstance.get<Blog[]>(`blogs/myBlogs`);
+  };
+
+  getMyBlogsByCategory = async (categoryId: string) => {
+    return await BlogAppClientInstance.get<Blog[]>(
+      `blogs/myBlogs/${categoryId}`
+    );
   };
 }
 

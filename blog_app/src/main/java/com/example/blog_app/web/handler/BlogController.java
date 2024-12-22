@@ -57,15 +57,20 @@ public class BlogController {
 
     @PutMapping("/update/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Blog> updateBlog(@PathVariable Long id,@RequestParam("title") String title,
+    public ResponseEntity<Blog> updateBlog(@PathVariable Long id,
+                                           @RequestParam("title") String title,
                                            @RequestParam("content") String content,
                                            @RequestParam("categoryId") Long categoryId,
-                                           @RequestParam("file") MultipartFile file) {
+                                           @RequestParam(value = "file", required = false) MultipartFile file
+                                           ) {
         BlogDto blogDto = new BlogDto();
         blogDto.setTitle(title);
         blogDto.setContent(content);
         blogDto.setCategoryId(categoryId);
-        blogDto.setFile(file);
+        if(file!=null){
+            blogDto.setFile(file);
+        }
+
         Blog updatedBlog = blogService.updateBlog(id, blogDto);
         return ResponseEntity.ok(updatedBlog);
     }
@@ -85,6 +90,12 @@ public class BlogController {
     public ResponseEntity<List<Blog>> getMyBlogs() {
         User user = userController.authenticatedUser().getBody();
         List<Blog> blogs = blogService.getBlogsByAuthor(user);
+        return ResponseEntity.ok(blogs);
+    }
+    @GetMapping("/myBlogs/{category_id}")
+    public ResponseEntity<List<Blog>> getMyBlogsByCategoryId(@PathVariable Long category_id) {
+        User user = userController.authenticatedUser().getBody();
+        List<Blog> blogs = blogService.getBlogsByAuthorAndCategory(user, category_id);
         return ResponseEntity.ok(blogs);
     }
 }

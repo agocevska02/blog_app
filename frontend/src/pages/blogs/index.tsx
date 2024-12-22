@@ -13,19 +13,23 @@ import { useState } from "react";
 import BlogsPerCategory from "./components/blogsPerCategory";
 import SubscriptionForm from "./components/subscriptionForm";
 import useFetchCategories from "@/hooks/useFetchCategories";
+import { useLocation } from "react-router-dom";
 
 const LatestBlogs = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const { categories, loading } = useFetchCategories();
+  const location = useLocation();
 
+  const isMyBlogs = location.pathname === "/my_blogs";
   return (
-    <Box>
+    <Box overflowX={"hidden"}>
       <HStack justify={"center"} mt="5">
-        <Heading size={"xl"}>Latest Blogs</Heading>
+        <Heading size={"xl"}>{isMyBlogs ? "My Blogs" : "Latest Blogs"}</Heading>
       </HStack>
-      <SubscriptionForm />
+      {!isMyBlogs && <SubscriptionForm />}
       <Tabs
         isFitted
+        mt={20}
         variant="enclosed"
         index={
           selectedCategoryId === ""
@@ -52,13 +56,16 @@ const LatestBlogs = () => {
         {!loading && (
           <TabPanels>
             <TabPanel>
-              <BlogsPerCategory categoryId={""} />
+              <BlogsPerCategory categoryId={""} isMyBlogs={isMyBlogs} />
             </TabPanel>
             {categories.length > 0 &&
               categories.map((category) => (
                 <TabPanel key={category.id}>
                   {selectedCategoryId === category.id && (
-                    <BlogsPerCategory categoryId={category.id} />
+                    <BlogsPerCategory
+                      categoryId={category.id}
+                      isMyBlogs={isMyBlogs}
+                    />
                   )}
                 </TabPanel>
               ))}

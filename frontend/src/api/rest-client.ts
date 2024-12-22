@@ -62,13 +62,6 @@ class BlogAppClient extends HttpClient {
           : { ...this.requestHeaders, ...contentTypeHeader },
         method: "GET",
       });
-
-      // if (response.status === 401) {
-      //   TokenService.clearToken();
-      //   window.location.href = "/login";
-      //   return Promise.reject("Unauthorized, redirecting to login.");
-      // }
-
       const responseData = await response.json();
       if (response.ok) {
         return responseData;
@@ -90,6 +83,7 @@ class BlogAppClient extends HttpClient {
     const isExpired = checkExpiration();
     if (isExpired) {
       TokenService.clearToken();
+      localStorage.removeItem("user");
       window.location.href = "/login";
       return Promise.reject("Unauthorized, redirecting to login.");
     }
@@ -139,7 +133,7 @@ class BlogAppClient extends HttpClient {
         ? undefined
         : { ...this.requestHeaders, ...contentTypeHeader },
       method: "PUT",
-      body: JSON.stringify(bodyData),
+      body: bodyData instanceof FormData ? bodyData : JSON.stringify(bodyData),
     });
 
     const responseData = await response.json();

@@ -4,10 +4,8 @@ import { User } from "./Users";
 export type BlogDto = {
   title: string;
   content: string;
-  categoryId: number;
-  imageUrl: string;
-  createdOn: string;
-  updatedOn: string;
+  categoryId: string;
+  file: File | string;
 };
 
 export type Blog = {

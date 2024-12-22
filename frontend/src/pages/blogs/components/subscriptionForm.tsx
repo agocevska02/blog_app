@@ -36,7 +36,7 @@ const SubscriptionForm = () => {
   };
 
   return (
-    <Box maxWidth="400px" mx="auto" mt="10" mb="10">
+    <Box maxWidth="400px" mx="auto" mt="10">
       <Formik
         validationSchema={EmailValidationSchema}
         initialValues={{ email: "" }}

@@ -13,6 +13,7 @@ import {
   Text,
   useColorModeValue,
   Link,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
@@ -25,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSignup = async (values: RegistrationDto) => {
     try {
@@ -32,19 +34,27 @@ const Signup = () => {
       if (user) {
         navigate("/login");
       }
-    } catch (err) {
-      console.error("Error during sign-up:", err);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while fetching blogs.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
   return (
     <Flex
       minH={"100vh"}
-      align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} width={"100%"} py={12} px={6}>
         <Stack align={"center"}>
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
@@ -72,17 +82,24 @@ const Signup = () => {
               <Form>
                 <Stack spacing={4}>
                   <HStack>
-                    <Box>
+                    <Box w={"100%"}>
                       <FormControl
                         id="fullName"
                         isInvalid={!!errors.fullName && touched.fullName}
                         isRequired
                       >
                         <FormLabel>Full Name</FormLabel>
-                        <Field name="fullName" as={Input} type="text" />
-                        <Text color="red.500" fontSize="sm">
-                          {errors.fullName && touched.fullName}
-                        </Text>
+                        <Field
+                          name="fullName"
+                          as={Input}
+                          type="text"
+                          width="100%"
+                        />
+                        {errors.fullName && touched.fullName && (
+                          <Text color="red.500" fontSize="sm">
+                            {errors.fullName}
+                          </Text>
+                        )}
                       </FormControl>
                     </Box>
                   </HStack>
@@ -93,9 +110,11 @@ const Signup = () => {
                   >
                     <FormLabel>Email address</FormLabel>
                     <Field name="email" as={Input} type="email" />
-                    <Text color="red.500" fontSize="sm">
-                      {errors.email && touched.email && errors.email}
-                    </Text>
+                    {errors.email && touched.email && (
+                      <Text color="red.500" fontSize="sm">
+                        {errors.email}
+                      </Text>
+                    )}
                   </FormControl>
                   <FormControl
                     id="password"
@@ -120,9 +139,11 @@ const Signup = () => {
                         </Button>
                       </InputRightElement>
                     </InputGroup>
-                    <Text color="red.500" fontSize="sm">
-                      {errors.password && touched.password && errors.password}
-                    </Text>
+                    {errors.password && touched.password && (
+                      <Text color="red.500" fontSize="sm">
+                        {errors.password}
+                      </Text>
+                    )}
                   </FormControl>
                   <Stack spacing={10} pt={2}>
                     <Button

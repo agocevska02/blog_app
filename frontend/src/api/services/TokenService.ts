@@ -9,6 +9,7 @@ class TokenService {
   
     static clearToken() {
       localStorage.removeItem('jwt');
+      localStorage.removeItem("user");
     }
   }
   

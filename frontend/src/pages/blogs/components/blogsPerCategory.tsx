@@ -1,16 +1,18 @@
 import { BlogService } from "@/api/services/BlogService";
 import { Blog } from "@/types/Blogs";
-import { Center, Flex, Spinner } from "@chakra-ui/react";
+import { Center, Flex, Heading, Spinner, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import BlogCard from "./blogCard";
 
 interface BlogsPerCategoryProps {
   categoryId: string;
+  isMyBlogs?: boolean;
 }
 
-const BlogsPerCategory = ({ categoryId }: BlogsPerCategoryProps) => {
+const BlogsPerCategory = ({ categoryId, isMyBlogs }: BlogsPerCategoryProps) => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const toast = useToast();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -19,15 +21,28 @@ const BlogsPerCategory = ({ categoryId }: BlogsPerCategoryProps) => {
         setLoading(true);
         let fetchedBlogs;
 
-        if (categoryId) {
-          fetchedBlogs = await BlogService.getBlogsByCategory(categoryId);
+        if (isMyBlogs) {
+          fetchedBlogs = categoryId
+            ? await BlogService.getMyBlogsByCategory(categoryId)
+            : await BlogService.getMyBlogs();
         } else {
-          fetchedBlogs = await BlogService.getAllBlogs();
+          fetchedBlogs = categoryId
+            ? await BlogService.getBlogsByCategory(categoryId)
+            : await BlogService.getAllBlogs();
         }
 
         setBlogs(fetchedBlogs);
       } catch (error) {
-        console.error("Error fetching blogs:", error);
+        toast({
+          title: "Error",
+          description:
+            error instanceof Error
+              ? error.message
+              : "An error occurred while fetching blogs.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
       } finally {
         setLoading(false);
       }
@@ -42,12 +57,16 @@ const BlogsPerCategory = ({ categoryId }: BlogsPerCategoryProps) => {
         <Center>
           <Spinner size="xl" />
         </Center>
-      ) : (
+      ) : blogs.length > 0 ? (
         <Flex justifyContent={"center"}>
           {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} />
+            <BlogCard key={blog.id} blog={blog} isMyBlog={isMyBlogs} />
           ))}
         </Flex>
+      ) : (
+        <Heading textAlign="center" alignSelf="center" size="md">
+          No blogs found
+        </Heading>
       )}
     </>
   );

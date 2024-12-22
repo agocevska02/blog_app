@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
+import { SigninSchema } from "@/formik/formik-validation-schemas";
 import { LoginDto } from "@/types/Users";
 import {
   Flex,
@@ -32,15 +33,14 @@ const SignIn = () => {
   return (
     <Flex
       minH={"100vh"}
-      align={"center"}
       justify={"center"}
       bg={useColorModeValue("gray.50", "gray.800")}
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6} w={"100%"}>
+        <Stack align={"center"} w={"100%"}>
           <Heading fontSize={"4xl"}>Sign in to your account</Heading>
           <Text fontSize={"lg"} color={"gray.600"}>
-            to write your own <Text color={"blue.400"}>blogs</Text> ✌️
+            to write your own blogs ✌️
           </Text>
         </Stack>
         <Box
@@ -55,6 +55,7 @@ const SignIn = () => {
               password: "",
             }}
             onSubmit={handleSignIn}
+            validationSchema={SigninSchema}
           >
             {({ isSubmitting, errors, touched }) => (
               <Form>
@@ -66,6 +67,11 @@ const SignIn = () => {
                   >
                     <FormLabel>Email address</FormLabel>
                     <Field name="email" as={Input} type="email" />
+                    {errors.email && touched.email && (
+                      <Text color="red.500" fontSize="sm">
+                        {errors.email}
+                      </Text>
+                    )}
                   </FormControl>
                   <FormControl
                     id="password"
@@ -74,6 +80,11 @@ const SignIn = () => {
                   >
                     <FormLabel>Password</FormLabel>
                     <Field name="password" as={Input} type="password" />
+                    {errors.password && touched.password && (
+                      <Text color="red.500" fontSize="sm">
+                        {errors.password}
+                      </Text>
+                    )}
                   </FormControl>
                   <Stack spacing={10}>
                     <Stack
@@ -89,7 +100,7 @@ const SignIn = () => {
                       _hover={{
                         bg: "blue.500",
                       }}
-                      onClick={() => handleSignIn}
+                      // onClick={() => handleSignIn}
                     >
                       Sign in
                     </Button>

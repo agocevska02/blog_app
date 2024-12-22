@@ -20,4 +20,6 @@ public interface BlogService {
     List<Blog> getBlogsByCategoryId(Long categoryId);
 
      List<Blog> getBlogsByAuthor(User author);
+
+     List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId);
 }
