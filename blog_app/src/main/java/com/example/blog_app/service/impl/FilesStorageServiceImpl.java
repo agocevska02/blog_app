@@ -108,5 +108,32 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
         return null;
     }
+    @Override
+    public boolean deletePhotoByName(String fileName) {
+        File dir = new File(basePath);
+        if (!dir.exists() || !dir.isDirectory()) {
+            logger.error("Directory does not exist or is not valid: {}", basePath);
+            return false;
+        }
+
+        File[] matchingFiles = dir.listFiles((file, name) -> name.equals(fileName));
+        if (matchingFiles == null || matchingFiles.length == 0) {
+            logger.info("No files found with name: {}", fileName);
+            return false;
+        }
+
+        boolean allDeleted = true;
+        for (File file : matchingFiles) {
+            if (file.delete()) {
+                logger.info("Deleted file: {}", file.getName());
+            } else {
+                logger.error("Failed to delete file: {}", file.getName());
+                allDeleted = false;
+            }
+        }
+
+        return allDeleted;
+    }
+
 
 }
