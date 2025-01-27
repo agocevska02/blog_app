@@ -12,4 +12,5 @@ public interface FilesStorageService {
     FileStatus uploadFile(MultipartFile multipartFile);
 
     Resource downloadFile(String fileName);
+    boolean deletePhotoByName(String fileName);
 }

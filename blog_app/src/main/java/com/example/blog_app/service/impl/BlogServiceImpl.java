@@ -19,11 +19,13 @@ public class BlogServiceImpl implements BlogService {
     private final BlogRepository blogRepository;
     private final CategoryRepository categoryRepository;
     private final FilesStorageController filesStorageController;
+    private final FilesStorageServiceImpl filesStorageServiceImpl;
 
-    public BlogServiceImpl(BlogRepository blogRepository, CategoryRepository categoryRepository, FilesStorageController filesStorageController) {
+    public BlogServiceImpl(BlogRepository blogRepository, CategoryRepository categoryRepository, FilesStorageController filesStorageController, FilesStorageServiceImpl filesStorageServiceImpl) {
         this.blogRepository = blogRepository;
         this.categoryRepository = categoryRepository;
         this.filesStorageController = filesStorageController;
+        this.filesStorageServiceImpl = filesStorageServiceImpl;
     }
 
 
@@ -50,6 +52,10 @@ public class BlogServiceImpl implements BlogService {
     public Blog updateBlog(Long id, BlogDto blogDto) {
         Blog blog = blogRepository.findById(id).orElse(null);
         if (blog != null) {
+           String previousImageUrl = blog.getImageUrl().split("/")[4];
+            if(blogDto.getFile() != null) {
+                filesStorageServiceImpl.deletePhotoByName(previousImageUrl);
+            }
             blog.setTitle(blogDto.getTitle());
             blog.setContent(blogDto.getContent());
             blog.setCategory(categoryRepository.findById(blogDto.getCategoryId()).orElse(null));
@@ -65,7 +71,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> getAllBlogs() {
-        return blogRepository.findAll();
+        return blogRepository.findAllByOrderByCreatedOnDesc();
     }
 
     @Override
@@ -75,16 +81,16 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> getBlogsByCategoryId(Long categoryId) {
-        return blogRepository.findByCategoryId(categoryId);
+        return blogRepository.findByCategoryIdOrderByCreatedOnDesc(categoryId);
     }
 
     @Override
     public List<Blog> getBlogsByAuthor(User author) {
-        return blogRepository.findByAuthor_Id(Long.valueOf(author.getId()));
+        return blogRepository.findByAuthor_IdOrderByCreatedOnDesc(Long.valueOf(author.getId()));
     }
 
     @Override
     public List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId) {
-        return blogRepository.findByAuthor_IdAndCategoryId(Long.valueOf(author.getId()), categoryId);
+        return blogRepository.findByAuthor_IdAndCategoryIdOrderByCreatedOnDesc(Long.valueOf(author.getId()), categoryId);
     }
 }
