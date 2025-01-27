@@ -1,13 +1,16 @@
-import { useBlog } from "@/contexts/BlogContext";
-import { Box, Heading, Text, Image, Flex } from "@chakra-ui/react";
+import useFetchBlogById from "@/hooks/useFetchBlogById";
+import { Box, Heading, Text, Image, Flex, Spinner } from "@chakra-ui/react";
 import { format } from "date-fns";
+import { useParams } from "react-router-dom";
 
 const BlogDetails = () => {
-  const { currentBlog: blog } = useBlog();
+  const { id } = useParams();
+  const { blog, loading, error } = useFetchBlogById(id ?? "");
 
-  if (!blog) {
-    return <div>No blog data found. Please navigate properly.</div>;
-  }
+  if (!blog) return <Spinner />;
+  if (loading) return <Spinner />;
+  if (error) return <Text>Something went wrong</Text>;
+  
   const createdOn = format(new Date(blog.createdOn), "MMMM d, yyyy");
   return (
     <>

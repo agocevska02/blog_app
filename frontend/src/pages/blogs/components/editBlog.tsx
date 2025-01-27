@@ -1,15 +1,17 @@
 import { BlogService } from "@/api/services/BlogService";
 import useFetchCategories from "@/hooks/useFetchCategories";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BlogDto } from "@/types/Blogs";
 import BlogForm from "./blogForm";
-import { useBlog } from "@/contexts/BlogContext";
+import useFetchBlogById from "@/hooks/useFetchBlogById";
+import { Spinner, Text } from "@chakra-ui/react";
 
 const EditBlog = () => {
   const { categories } = useFetchCategories();
   const navigate = useNavigate();
-  const { currentBlog: blog } = useBlog();
+  const { id } = useParams();
+  const { blog, loading, error } = useFetchBlogById(id ?? "");
   const [initialValues, setInitialValues] = useState<{
     id: string;
     title: string;
@@ -33,7 +35,7 @@ const EditBlog = () => {
       categoryId: blog.category.id,
       file: blog.imageUrl,
     });
-  }, []);
+  }, [blog]);
 
   const handleEdit = async (initialVals: BlogDto, values: BlogDto) => {
     if (!blog) return;
@@ -49,6 +51,9 @@ const EditBlog = () => {
       navigate("/my_blogs");
     }
   };
+  if (loading) return <Spinner />;
+  if (error) return <Text>Something went wrong</Text>;
+  
   return (
     <BlogForm
       initialValues={initialValues}

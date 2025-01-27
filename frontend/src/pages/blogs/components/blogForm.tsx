@@ -205,14 +205,27 @@ const BlogForm = ({
                   py={4}
                   borderTop="1px solid #ddd"
                   textAlign="center"
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
                 >
                   <Button
                     type="submit"
                     colorScheme="teal"
                     size="lg"
-                    width="100%"
+                    width="90%"
+                    marginRight={"10px"}
                   >
                     {submitButtonLabel}
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    colorScheme="teal"
+                    size="lg"
+                    width="90%"
+                  >
+                    Cancel
                   </Button>
                 </Box>
               </Form>
