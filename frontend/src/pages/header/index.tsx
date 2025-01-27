@@ -244,7 +244,7 @@ const NAV_ITEMS: Array<NavItem> = [
   // },
   {
     label: "Blogs",
-    href: "/blogs",
+    href: "/",
   },
   {
     label: "My Blogs",

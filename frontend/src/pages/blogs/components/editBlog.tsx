@@ -1,14 +1,15 @@
 import { BlogService } from "@/api/services/BlogService";
 import useFetchCategories from "@/hooks/useFetchCategories";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { BlogDto } from "@/types/Blogs";
 import BlogForm from "./blogForm";
+import { useBlog } from "@/contexts/BlogContext";
 
 const EditBlog = () => {
   const { categories } = useFetchCategories();
-  const { id } = useParams();
   const navigate = useNavigate();
+  const { currentBlog: blog } = useBlog();
   const [initialValues, setInitialValues] = useState<{
     id: string;
     title: string;
@@ -24,22 +25,18 @@ const EditBlog = () => {
   });
 
   useEffect(() => {
-    if (!id) return;
-    const fetchBlog = async () => {
-      const blog = await BlogService.getBlogById(id);
-      setInitialValues({
-        id: blog.id,
-        title: blog.title,
-        content: blog.content,
-        categoryId: blog.category.id,
-        file: blog.imageUrl,
-      });
-    };
-    fetchBlog();
-  }, [id]);
+    if (!blog) return;
+    setInitialValues({
+      id: blog.id,
+      title: blog.title,
+      content: blog.content,
+      categoryId: blog.category.id,
+      file: blog.imageUrl,
+    });
+  }, []);
 
   const handleEdit = async (initialVals: BlogDto, values: BlogDto) => {
-    if (!id) return;
+    if (!blog) return;
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("content", values.content);
@@ -47,7 +44,7 @@ const EditBlog = () => {
     if (values.file && values.file != initialVals.file) {
       formData.append("file", values.file as Blob);
     }
-    const data = await BlogService.updateBlog(id, formData);
+    const data = await BlogService.updateBlog(blog.id, formData);
     if (data) {
       navigate("/my_blogs");
     }
