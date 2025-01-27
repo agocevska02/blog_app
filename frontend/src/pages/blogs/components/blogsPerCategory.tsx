@@ -14,6 +14,31 @@ const BlogsPerCategory = ({ categoryId, isMyBlogs }: BlogsPerCategoryProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
 
+  const onDelete = async (id: string) => {
+    try {
+      await BlogService.deleteBlog(id);
+      setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog.id !== id));
+
+      toast({
+        title: "Success",
+        description: "Blog deleted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occurred while deleting blog.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
   useEffect(() => {
     const fetchBlogs = async () => {
       if (loading) return;
@@ -60,7 +85,12 @@ const BlogsPerCategory = ({ categoryId, isMyBlogs }: BlogsPerCategoryProps) => {
       ) : blogs.length > 0 ? (
         <Flex justifyContent={"center"}>
           {blogs.map((blog) => (
-            <BlogCard key={blog.id} blog={blog} isMyBlog={isMyBlogs} />
+            <BlogCard
+              key={blog.id}
+              blog={blog}
+              isMyBlog={isMyBlogs}
+              onDelete={onDelete}
+            />
           ))}
         </Flex>
       ) : (

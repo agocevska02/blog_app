@@ -24,7 +24,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<LatestBlogs />} />
               <Route
-                path="/create_blog"
+                path="/blog/create"
                 element={
                   <ProtectedRoute
                     Component={CreateBlog}
@@ -33,7 +33,7 @@ function App() {
                 }
               />
               <Route
-                path="/edit_blog/:id"
+                path="/blog/edit/:id"
                 element={
                   <ProtectedRoute
                     Component={EditBlog}
@@ -61,7 +61,7 @@ function App() {
                 }
               />
               <Route
-                path="/create_category"
+                path="/category/create"
                 element={
                   <ProtectedRoute
                     Component={AddCategoryPage}

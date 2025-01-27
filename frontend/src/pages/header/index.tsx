@@ -253,10 +253,10 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Write a Blog",
-    href: "/create_blog",
+    href: "/blog/create",
   },
   {
     label: "Manage Categories",
-    href: "/create_category",
+    href: "/category/create",
   },
 ];
