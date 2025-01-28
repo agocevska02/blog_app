@@ -42,11 +42,16 @@ const BlogForm = ({
       display="flex"
       justifyContent="center"
       alignItems="start"
-      bg="white"
       p={4}
     >
       <Box width="100%" maxW="1000px" p={8}>
-        <Heading as="h1" size="xl" mb={8} textAlign="center">
+        <Heading
+          as="h1"
+          size="xl"
+          mb={8}
+          textAlign="center"
+          color="chakra-text-color"
+        >
           {heading}
         </Heading>
 
@@ -78,7 +83,8 @@ const BlogForm = ({
               boxShadow: "none",
               bg: "transparent",
               fontSize: "1.2rem",
-              _placeholder: { color: "gray.400" },
+              color: "chakra-text-color",
+              _placeholder: { color: "gray.400", opacity: 0.6 },
               paddingX: "10px",
             };
 
@@ -129,7 +135,7 @@ const BlogForm = ({
                     htmlFor="categoryId"
                     fontSize="1.2rem"
                     fontWeight="bold"
-                    color="teal.600"
+                    color="teal.400"
                     mb={2}
                   >
                     Category
@@ -142,17 +148,32 @@ const BlogForm = ({
                       border: "none",
                       fontSize: "1.2rem",
                       padding: "8px 0",
-                      background: "transparent",
-                      borderBottom: "1px solid gray",
+                      background: "var(--chakra-colors-chakra-body-bg)",
+                      color: "var(--chakra-colors-chakra-text-color)",
+                      borderBottom: "1px solid var(--chakra-colors-chakra-border-color)",
                       width: "100%",
                     }}
                     value={values.categoryId}
                   >
-                    <option value="" disabled>
+                    <option
+                      value=""
+                      disabled
+                      style={{
+                        background: "var(--chakra-colors-chakra-body-bg)",
+                        color: "var(--chakra-colors-chakra-text-color)",
+                      }}
+                    >
                       Select a category
                     </option>
                     {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
+                      <option
+                        key={category.id}
+                        value={category.id}
+                        style={{
+                          background: "var(--chakra-colors-chakra-body-bg)",
+                          color: "var(--chakra-colors-chakra-text-color)",
+                        }}
+                      >
                         {category.name}
                       </option>
                     ))}
@@ -201,13 +222,14 @@ const BlogForm = ({
                 <Box
                   position="sticky"
                   bottom="0"
-                  bg="white"
+                  bg="chakra-body-bg"
                   py={4}
-                  borderTop="1px solid #ddd"
+                  borderTop="1px"
+                  borderColor="chakra-border-color"
                   textAlign="center"
-                  display={"flex"}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
                   <Button
                     type="submit"

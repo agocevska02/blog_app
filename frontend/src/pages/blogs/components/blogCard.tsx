@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogBody,
   AlertDialogFooter,
+  Box,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +30,9 @@ interface BlogCardProps {
 const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
   const navigate = useNavigate();
   const { setCurrentBlog } = useBlog();
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
-  const { isOpen, onOpen, onClose } =  useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleDelete = () => {
     onDelete(blog.id);
@@ -43,62 +45,96 @@ const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
     <>
       <Card
         maxW="sm"
-        margin={2}
-        border="none"
-        boxShadow="none"
+        width="300px"
+        height="450px"
         borderRadius="lg"
+        overflow="hidden"
+        boxShadow="md"
+        bg="chakra-body-bg"
+        _hover={{
+          boxShadow: 'lg',
+          transform: 'translateY(-2px)',
+          transition: 'all 0.2s ease-in-out'
+        }}
       >
-        <CardBody display="flex" flexDirection="column" alignItems="center">
+        <CardBody padding={0} display="flex" flexDirection="column">
           <Image
             src={blog.imageUrl}
             alt={blog.title}
             objectFit="cover"
-            borderRadius="lg"
-            boxSize="200px"
-            width={"100%"}
-            height={"100%"}
+            height="200px"
+            width="100%"
             fallbackSrc="https://via.placeholder.com/150"
           />
 
-          <Stack mt={4} spacing={2} width="full" align="center">
-            <Heading size="md">{blog.title}</Heading>
-            <Text noOfLines={2} textAlign="center" marginBottom={2}>
-              {blog.content}
-            </Text>
-            <Text color="teal.600" fontSize="xl">
-              {blog.author?.fullName}
-            </Text>
+          <Box p={5} flex="1" display="flex" flexDirection="column">
+            <Stack spacing={3} flex="1">
+              <Box>
+                <Heading
+                  size="md"
+                  noOfLines={2}
+                  mb={2}
+                  color="chakra-text-color"
+                >
+                  {blog.title}
+                </Heading>
+                <Text
+                  noOfLines={3}
+                  color="chakra-text-color"
+                  opacity={0.8}
+                >
+                  {blog.content}
+                </Text>
+              </Box>
 
-            <ButtonGroup spacing="2">
-              <Button
-                variant="solid"
-                colorScheme="teal"
-                onClick={() => {
-                  setCurrentBlog(blog);
-                  navigate(`/blog/${blog.id}`);
-                }}
-              >
-                Read more
-              </Button>
-              {isMyBlog && (
-                <>
+              <Box mt="auto">
+                <Text
+                  color="teal.400"
+                  fontSize="md"
+                  mb={4}
+                >
+                  {blog.author?.fullName}
+                </Text>
+
+                <ButtonGroup spacing={2}>
                   <Button
                     variant="solid"
                     colorScheme="teal"
+                    size="sm"
                     onClick={() => {
                       setCurrentBlog(blog);
-                      navigate(`/blog/edit/${blog.id}`);
+                      navigate(`/blog/${blog.id}`);
                     }}
                   >
-                    Edit Blog
+                    Read more
                   </Button>
-                  <Button variant="solid" colorScheme="teal" onClick={onOpen}>
-                    Delete
-                  </Button>
-                </>
-              )}
-            </ButtonGroup>
-          </Stack>
+                  {isMyBlog && (
+                    <Button
+                      variant="outline"
+                      colorScheme="teal"
+                      size="sm"
+                      onClick={() => {
+                        setCurrentBlog(blog);
+                        navigate(`/blog/edit/${blog.id}`);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {(isMyBlog || user?.role === "ROLE_ADMIN") && (
+                    <Button
+                      variant="outline"
+                      colorScheme="red"
+                      size="sm"
+                      onClick={onOpen}
+                    >
+                      Delete
+                    </Button>
+                  )}
+                </ButtonGroup>
+              </Box>
+            </Stack>
+          </Box>
         </CardBody>
       </Card>
 

@@ -11,6 +11,7 @@ import SignIn from "./pages/authentication/signIn";
 import Signup from "./pages/authentication/signup";
 import BlogDetails from "./pages/blogs/components/blogDetails";
 import { BlogProvider } from "./contexts/BlogContext";
+import ListCategories from "./pages/categories/ListCategories";
 
 function App() {
   return (
@@ -28,7 +29,7 @@ function App() {
                 element={
                   <ProtectedRoute
                     Component={CreateBlog}
-                    roles={["ROLE_USER", "ROLE_ADMIN"]}
+                    roles={["ROLE_USER"]}
                   />
                 }
               />
@@ -65,7 +66,16 @@ function App() {
                 element={
                   <ProtectedRoute
                     Component={AddCategoryPage}
-                    roles={["ROLE_USER", "ROLE_ADMIN"]}
+                    roles={["ROLE_ADMIN"]}
+                  />
+                }
+              />
+              <Route
+                path="/categories"
+                element={
+                  <ProtectedRoute
+                    Component={ListCategories}
+                    roles={["ROLE_ADMIN"]}
                   />
                 }
               />
