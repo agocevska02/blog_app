@@ -8,17 +8,20 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Link,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import BlogsPerCategory from "./components/blogsPerCategory";
 import SubscriptionForm from "./components/subscriptionForm";
 import useFetchCategories from "@/hooks/useFetchCategories";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link as RouterLink } from "react-router-dom";
 
 const LatestBlogs = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
-  const { categories, loading } = useFetchCategories();
   const location = useLocation();
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>(
+    location.state?.selectedCategoryId || ""
+  );
+  const { categories, loading } = useFetchCategories();
 
   const isMyBlogs = location.pathname === "/my_blogs";
   return (
@@ -35,8 +38,8 @@ const LatestBlogs = () => {
           selectedCategoryId === ""
             ? 0
             : categories.findIndex(
-                (category) => category.id === selectedCategoryId
-              ) + 1
+              (category) => category.id === selectedCategoryId
+            ) + 1
         }
         onChange={(index) => {
           if (index === 0) {
@@ -65,6 +68,7 @@ const LatestBlogs = () => {
                     <BlogsPerCategory
                       categoryId={category.id}
                       isMyBlogs={isMyBlogs}
+                      variant="grid"
                     />
                   )}
                 </TabPanel>

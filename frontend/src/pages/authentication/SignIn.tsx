@@ -12,8 +12,7 @@ import {
   Stack,
   Button,
   Heading,
-  Text,
-  useColorModeValue,
+  Text
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -32,21 +31,29 @@ const SignIn = () => {
 
   return (
     <Flex
-      minH={"100vh"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      minH="100vh"
+      justify="center"
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6} w={"100%"}>
-        <Stack align={"center"} w={"100%"}>
-          <Heading fontSize={"4xl"}>Sign in to your account</Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
+      <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6} w="100%">
+        <Stack align="center" w="100%">
+          <Heading
+            fontSize="4xl"
+            color="chakra-text-color"
+          >
+            Sign in to your account
+          </Heading>
+          <Text
+            fontSize="lg"
+            color="chakra-text-color"
+            opacity={0.8}
+          >
             to write your own blogs ✌️
           </Text>
         </Stack>
         <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
+          rounded="lg"
+          bg="chakra-body-bg"
+          boxShadow="lg"
           p={8}
         >
           <Formik
@@ -65,7 +72,7 @@ const SignIn = () => {
                     isInvalid={!!errors.email && touched.email}
                     isRequired
                   >
-                    <FormLabel>Email address</FormLabel>
+                    <FormLabel color="chakra-text-color">Email address</FormLabel>
                     <Field name="email" as={Input} type="email" />
                     {errors.email && touched.email && (
                       <Text color="red.500" fontSize="sm">
@@ -78,7 +85,7 @@ const SignIn = () => {
                     isInvalid={!!errors.password && touched.password}
                     isRequired
                   >
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel color="chakra-text-color">Password</FormLabel>
                     <Field name="password" as={Input} type="password" />
                     {errors.password && touched.password && (
                       <Text color="red.500" fontSize="sm">
@@ -87,20 +94,14 @@ const SignIn = () => {
                     )}
                   </FormControl>
                   <Stack spacing={10}>
-                    <Stack
-                      direction={{ base: "column", sm: "row" }}
-                      align={"start"}
-                      justify={"space-between"}
-                    ></Stack>
                     <Button
                       isLoading={isSubmitting}
                       type="submit"
-                      bg={"blue.400"}
-                      color={"white"}
+                      colorScheme="teal"
+                      color="white"
                       _hover={{
-                        bg: "blue.500",
+                        opacity: 0.8,
                       }}
-                      // onClick={() => handleSignIn}
                     >
                       Sign in
                     </Button>

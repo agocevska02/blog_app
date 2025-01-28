@@ -21,9 +21,10 @@ export class CategoryServices {
   };
 
   deleteCategory = async (id: string) => {
-    return await BlogAppClientInstance.delete<Category>(
+    const response = await BlogAppClientInstance.delete<Category>(
       `categories/delete/${id}`
     );
+    return response;
   };
 
   getCategoryById = async (id: string) => {

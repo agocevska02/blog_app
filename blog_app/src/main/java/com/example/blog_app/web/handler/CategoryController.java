@@ -2,6 +2,7 @@ package com.example.blog_app.web.handler;
 
 import com.example.blog_app.model.Category;
 import com.example.blog_app.model.dto.CategoryDto;
+import com.example.blog_app.service.BlogService;
 import com.example.blog_app.service.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import java.util.List;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final BlogService blogService;
 
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, BlogService blogService) {
         this.categoryService = categoryService;
+        this.blogService = blogService;
     }
 
     @GetMapping
@@ -36,6 +39,7 @@ public class CategoryController {
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        blogService.getBlogsByCategoryId(id).forEach(blog -> blogService.deleteBlog(blog.getId()));
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
