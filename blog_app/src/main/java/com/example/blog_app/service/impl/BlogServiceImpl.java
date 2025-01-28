@@ -1,5 +1,6 @@
 package com.example.blog_app.service.impl;
 
+import com.example.blog_app.events.BlogCreatedEvent;
 import com.example.blog_app.model.Blog;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
@@ -7,6 +8,7 @@ import com.example.blog_app.repository.BlogRepository;
 import com.example.blog_app.repository.CategoryRepository;
 import com.example.blog_app.service.BlogService;
 import com.example.blog_app.web.handler.FilesStorageController;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,11 +23,18 @@ public class BlogServiceImpl implements BlogService {
     private final FilesStorageController filesStorageController;
     private final FilesStorageServiceImpl filesStorageServiceImpl;
 
-    public BlogServiceImpl(BlogRepository blogRepository, CategoryRepository categoryRepository, FilesStorageController filesStorageController, FilesStorageServiceImpl filesStorageServiceImpl) {
+    private final ApplicationEventPublisher eventPublisher;
+
+    public BlogServiceImpl(BlogRepository blogRepository,
+                           CategoryRepository categoryRepository,
+                           FilesStorageController filesStorageController,
+                           FilesStorageServiceImpl filesStorageServiceImpl,
+                           ApplicationEventPublisher eventPublisher) {
         this.blogRepository = blogRepository;
         this.categoryRepository = categoryRepository;
         this.filesStorageController = filesStorageController;
         this.filesStorageServiceImpl = filesStorageServiceImpl;
+        this.eventPublisher = eventPublisher;
     }
 
 
@@ -41,8 +50,11 @@ public class BlogServiceImpl implements BlogService {
         );
         blog.setCreatedOn(LocalDateTime.now());
         blogRepository.save(blog);
+
+        eventPublisher.publishEvent(new BlogCreatedEvent(blog));
         return blog;
     }
+
     @Override
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
@@ -52,15 +64,15 @@ public class BlogServiceImpl implements BlogService {
     public Blog updateBlog(Long id, BlogDto blogDto) {
         Blog blog = blogRepository.findById(id).orElse(null);
         if (blog != null) {
-           String previousImageUrl = blog.getImageUrl().split("/")[4];
-            if(blogDto.getFile() != null) {
+            String previousImageUrl = blog.getImageUrl().split("/")[4];
+            if (blogDto.getFile() != null) {
                 filesStorageServiceImpl.deletePhotoByName(previousImageUrl);
             }
             blog.setTitle(blogDto.getTitle());
             blog.setContent(blogDto.getContent());
             blog.setCategory(categoryRepository.findById(blogDto.getCategoryId()).orElse(null));
             blog.setUpdatedOn(LocalDateTime.now());
-            if(blogDto.getFile() != null) {
+            if (blogDto.getFile() != null) {
                 String imageUrl = ((Map<String, String>) filesStorageController.uploadFile(blogDto.getFile()).getBody()).get("fileUri");
                 blog.setImageUrl(imageUrl);
             }
