@@ -72,9 +72,10 @@ public class BlogServiceImpl implements BlogService {
             String previousImageUrl = blog.getImageUrl().split("/")[4];
             filesStorageServiceImpl.deletePhotoByName(previousImageUrl);
             imageService.deleteImage(blog.getPublicImage().getFieldId());
-            publicImageService.deletePublicImage(blog.getPublicImage().getId());
+            Long publicImageId = blog.getPublicImage().getId();
+            blogRepository.deleteById(id);
+            publicImageService.deletePublicImage(publicImageId);
         }
-        blogRepository.deleteById(id);
     }
 
     @Override
