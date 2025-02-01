@@ -150,7 +150,8 @@ const BlogForm = ({
                       padding: "8px 0",
                       background: "var(--chakra-colors-chakra-body-bg)",
                       color: "var(--chakra-colors-chakra-text-color)",
-                      borderBottom: "1px solid var(--chakra-colors-chakra-border-color)",
+                      borderBottom:
+                        "1px solid var(--chakra-colors-chakra-border-color)",
                       width: "100%",
                     }}
                     value={values.categoryId}
@@ -220,36 +221,41 @@ const BlogForm = ({
                 </FormControl>
 
                 <Box
-                  position="sticky"
-                  bottom="0"
+                  position="fixed"
+                  bottom="20px"
+                  left="50%"
+                  transform="translateX(-50%)"
                   bg="chakra-body-bg"
-                  py={4}
-                  borderTop="1px"
-                  borderColor="chakra-border-color"
-                  textAlign="center"
+                  py={3}
+                  px={6}
+                  borderRadius="lg"
                   display="flex"
-                  justifyContent="space-between"
+                  justifyContent="center"
                   alignItems="center"
+                  gap={4}
+                  zIndex="1000"
+                  width={"50%"}
                 >
                   <Button
                     type="submit"
                     colorScheme="teal"
                     size="lg"
                     width="90%"
-                    marginRight={"10px"}
                   >
                     {submitButtonLabel}
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => window.history.back()}
-                    colorScheme="teal"
-                    size="lg"
                     width="90%"
+                    onClick={() => window.history.back()}
+                    colorScheme="gray"
+                    size="lg"
                   >
                     Cancel
                   </Button>
                 </Box>
+
+                <Box height="60px" />
               </Form>
             );
           }}
