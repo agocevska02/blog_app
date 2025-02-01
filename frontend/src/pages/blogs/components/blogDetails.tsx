@@ -10,7 +10,7 @@ const BlogDetails = () => {
   const { id } = useParams();
   const { blog, loading, error } = useFetchBlogById(id ?? "");
 
-  if (!blog) return <Spinner />;
+  if (!blog) return <Text>Blog not found</Text>;
   if (loading) return <Spinner />;
   if (error) return <Text>Something went wrong</Text>;
 

@@ -23,7 +23,7 @@ public class BlogCreatedEventListener {
 
     public BlogCreatedEventListener(SubscriptionService subscriptionService, EmailService emailService) {
         this.subscriptionService = subscriptionService;
-        this.emailService=emailService;
+        this.emailService = emailService;
     }
 
     @EventListener
@@ -33,9 +33,26 @@ public class BlogCreatedEventListener {
         String link = baseUrl + blog.getId();
         List<Subscription> subscriptions = subscriptionService.getAllSubscriptions();
         subscriptions.forEach(subscription -> {
-            String message = "Hello, " + subscription.getEmail() + " a new blog was just published. Take a look at it ";
+            String message = "Hello, " + subscription.getEmail() + " a new blog was just published.";
             String subject = "Exciting news from Blog App";
-            EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), subject, message, "", link);
+
+            String content = blog.getContent();
+            String previewContent = content.length() > 200 ? content.substring(0, 200) + "..." : content;
+
+            String htmlContent = String.format("""
+                    <html>
+                    <body>
+                        <div class="container">
+                            <p class="header">%s · by %s</p> 
+                            <p class="blog-title">%s</p>
+                            <p class="blog-content">%s</p>
+                            <a href="%s" class="read-more">Read More</a>
+                            <img src="%s" alt="Blog Image" class="blog-image">
+                        </div>
+                    </body>
+                    </html>
+                    """, blog.getCategory().getName(), blog.getAuthor().getFullName(), blog.getTitle(), previewContent, link, blog.getImageUrl());
+            EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), subject, htmlContent + message, link);
             emailService.sendSimpleMail(emailDetails);
         });
     }

@@ -13,4 +13,14 @@ public class EmailDetails {
     private String message;
     private String attachment;
     private String link;
+
+    public EmailDetails(String recipient,
+                        String subject,
+                        String message,
+                        String link) {
+        this.recipient = recipient;
+        this.subject = subject;
+        this.message = message;
+        this.link = link;
+    }
 }
