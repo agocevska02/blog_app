@@ -40,20 +40,52 @@ public class BlogCreatedEventListener {
             String previewContent = content.length() > 200 ? content.substring(0, 200) + "..." : content;
 
             String htmlContent = String.format("""
-                    <html>
-                    <body>
-                        <div class="container">
-                            <p class="header">%s · by %s</p> 
-                            <p class="blog-title">%s</p>
-                            <p class="blog-content">%s</p>
-                            <a href="%s" class="read-more">Read More</a>
-                            <img src="%s" alt="Blog Image" class="blog-image">
-                        </div>
-                    </body>
-                    </html>
-                    """, blog.getCategory().getName(), blog.getAuthor().getFullName(), blog.getTitle(), previewContent, link, blog.getImageUrl());
-            EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), subject, htmlContent + message, link);
+                            <html>
+                            <body style="font-family: Arial, sans-serif; background-color: #181818; color: #ffffff; padding: 20px; text-align: center;">
+                                <div style="background-color: #222222; padding: 20px; border-radius: 10px; max-width: 600px; margin: auto; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);">
+                                    
+                                    <!-- Greeting Message -->
+                                    <p style="font-size: 16px; color: #cccccc; text-align: left;">
+                                        Hello, %s, a new blog was just published.
+                                    </p>
+                                    
+                                    <!-- Blog Header -->
+                                    <p style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #f5a623;">
+                                        %s · by %s
+                                    </p>
+                                    
+                                    <!-- Blog Title -->
+                                    <p style="font-size: 24px; font-weight: bold; margin: 10px 0; color: #ffffff;">
+                                        %s
+                                    </p>
+                                    
+                                    <!-- Blog Content Preview -->
+                                    <p style="font-size: 16px; color: #cccccc; line-height: 1.6; margin-bottom: 15px; text-align: left;">
+                                        %s
+                                    </p>
+
+                                    <!-- Blog Image -->
+                                    <img src="%s" alt="Blog Image" style="width: 100%%; max-width: 500px; border-radius: 8px; display: block; margin: 10px auto; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);">
+                                    
+                                    <!-- Read More Button -->
+                                    <a href="%s" style="display: inline-block; padding: 12px 20px; background-color: #f5a623; color: #181818; text-decoration: none; font-weight: bold; border-radius: 5px; transition: background 0.3s; margin-top: 15px;">
+                                        Read More
+                                    </a>
+                                </div>
+                            </body>
+                            </html>
+                            """,
+                    subscription.getEmail(),
+                    blog.getCategory().getName(),
+                    blog.getAuthor().getFullName(),
+                    blog.getTitle(),
+                    previewContent,
+                    blog.getPublicImage().getPublicImageUrl(),
+                    link);
+
+            EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), subject, htmlContent, link);
             emailService.sendSimpleMail(emailDetails);
+
         });
     }
 }

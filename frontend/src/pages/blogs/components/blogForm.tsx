@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CreateBlogSchema } from "@/formik/formik-validation-schemas";
 import { BlogDto } from "@/types/Blogs";
 import {
@@ -22,7 +23,7 @@ interface BlogFormProps {
     file: File | string;
   };
   categories: { id: string; name: string }[];
-  onSubmit: (initialValues: BlogDto, values: BlogDto) => void;
+  onSubmit: (initialValues: BlogDto, values: BlogDto) => Promise<void>;
   heading: string;
   submitButtonLabel: string;
 }
@@ -34,7 +35,7 @@ const BlogForm = ({
   heading,
   submitButtonLabel,
 }: BlogFormProps) => {
-  const formKey = JSON.stringify(initialValues);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Box
@@ -58,8 +59,13 @@ const BlogForm = ({
         <Formik
           initialValues={initialValues}
           validationSchema={CreateBlogSchema}
-          onSubmit={(values) => onSubmit(initialValues, values)}
-          key={formKey}
+          onSubmit={async (values, actions) => {
+            setIsLoading(true);
+            await onSubmit(initialValues, values);
+            setIsLoading(false);
+            actions.setSubmitting(false);
+          }}
+          key={JSON.stringify(initialValues)}
         >
           {({ handleSubmit, errors, touched, setFieldValue, values }) => {
             const onDrop = (acceptedFiles: File[]) => {
@@ -102,7 +108,6 @@ const BlogForm = ({
                     placeholder="Blog Title"
                     fontWeight={700}
                     {...inputStyles}
-                    value={values.title}
                   />
                   <FormErrorMessage>{errors.title}</FormErrorMessage>
                 </FormControl>
@@ -120,7 +125,6 @@ const BlogForm = ({
                     resize="vertical"
                     minHeight="450px"
                     {...inputStyles}
-                    value={values.content}
                   />
                   <FormErrorMessage>{errors.content}</FormErrorMessage>
                 </FormControl>
@@ -132,7 +136,6 @@ const BlogForm = ({
                   isRequired
                 >
                   <FormLabel
-                    htmlFor="categoryId"
                     fontSize="1.2rem"
                     fontWeight="bold"
                     color="teal.400"
@@ -154,27 +157,12 @@ const BlogForm = ({
                         "1px solid var(--chakra-colors-chakra-border-color)",
                       width: "100%",
                     }}
-                    value={values.categoryId}
                   >
-                    <option
-                      value=""
-                      disabled
-                      style={{
-                        background: "var(--chakra-colors-chakra-body-bg)",
-                        color: "var(--chakra-colors-chakra-text-color)",
-                      }}
-                    >
+                    <option value="" disabled>
                       Select a category
                     </option>
                     {categories.map((category) => (
-                      <option
-                        key={category.id}
-                        value={category.id}
-                        style={{
-                          background: "var(--chakra-colors-chakra-body-bg)",
-                          color: "var(--chakra-colors-chakra-text-color)",
-                        }}
-                      >
+                      <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
                     ))}
@@ -215,9 +203,7 @@ const BlogForm = ({
                       <p>Drag and drop an image, or click to select one</p>
                     )}
                   </Box>
-                  {touched.file && errors.file && (
-                    <FormErrorMessage>Image is required</FormErrorMessage>
-                  )}
+                  <FormErrorMessage>{errors.file}</FormErrorMessage>
                 </FormControl>
 
                 <Box
@@ -234,13 +220,16 @@ const BlogForm = ({
                   alignItems="center"
                   gap={4}
                   zIndex="1000"
-                  width={"50%"}
+                  width="50%"
                 >
                   <Button
                     type="submit"
                     colorScheme="teal"
                     size="lg"
                     width="90%"
+                    isLoading={isLoading}
+                    loadingText="Submitting..."
+                    isDisabled={isLoading}
                   >
                     {submitButtonLabel}
                   </Button>
@@ -250,6 +239,7 @@ const BlogForm = ({
                     onClick={() => window.history.back()}
                     colorScheme="gray"
                     size="lg"
+                    isDisabled={isLoading}
                   >
                     Cancel
                   </Button>

@@ -35,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
             mimeMessageHelper.setSubject(details.getSubject());
 
 
-            String htmlContent = details.getMessage() + " <br/>Take a look at it <a href=\"" + details.getLink() + "\">here</a>.";
+            String htmlContent = details.getMessage();
 
             mimeMessageHelper.setText(htmlContent, true);
 
