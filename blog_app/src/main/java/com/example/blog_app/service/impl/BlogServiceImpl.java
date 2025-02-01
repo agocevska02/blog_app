@@ -57,6 +57,11 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public void deleteBlog(Long id) {
+        Blog blog = blogRepository.findById(id).orElse(null);
+        if (blog != null) {
+            String previousImageUrl = blog.getImageUrl().split("/")[4];
+            filesStorageServiceImpl.deletePhotoByName(previousImageUrl);
+        }
         blogRepository.deleteById(id);
     }
 
