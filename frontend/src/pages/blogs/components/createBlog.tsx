@@ -238,7 +238,7 @@ const CreateBlog = () => {
   const { categories } = useFetchCategories();
   const navigate = useNavigate();
 
-  const handleCreate = async (values: BlogDto) => {
+  const handleCreate = async (_: BlogDto, values: BlogDto) => {
     const formData = new FormData();
     formData.append("title", values.title);
     formData.append("content", values.content);

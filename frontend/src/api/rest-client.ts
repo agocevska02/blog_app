@@ -171,12 +171,15 @@ class BlogAppClient extends HttpClient {
       body: JSON.stringify(bodyData),
     });
 
-    const responseData = await response.json();
+    if (!response.ok) {
+      throw new Error("Failed to delete");
+    }
 
-    if (!responseData.error) {
-      return await responseData;
-    } else {
-      throw new Error(responseData.error.message);
+    try {
+      const responseData = await response.json();
+      return responseData;
+    } catch {
+      return {} as T;
     }
   }
 

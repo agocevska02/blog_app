@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { CreateBlogSchema } from "@/formik/formik-validation-schemas";
 import { BlogDto } from "@/types/Blogs";
 import {
@@ -22,7 +23,7 @@ interface BlogFormProps {
     file: File | string;
   };
   categories: { id: string; name: string }[];
-  onSubmit: (initialValues: BlogDto, values: BlogDto) => void;
+  onSubmit: (initialValues: BlogDto, values: BlogDto) => Promise<void>;
   heading: string;
   submitButtonLabel: string;
 }
@@ -34,7 +35,7 @@ const BlogForm = ({
   heading,
   submitButtonLabel,
 }: BlogFormProps) => {
-  const formKey = JSON.stringify(initialValues);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Box
@@ -42,19 +43,29 @@ const BlogForm = ({
       display="flex"
       justifyContent="center"
       alignItems="start"
-      bg="white"
       p={4}
     >
       <Box width="100%" maxW="1000px" p={8}>
-        <Heading as="h1" size="xl" mb={8} textAlign="center">
+        <Heading
+          as="h1"
+          size="xl"
+          mb={8}
+          textAlign="center"
+          color="chakra-text-color"
+        >
           {heading}
         </Heading>
 
         <Formik
           initialValues={initialValues}
           validationSchema={CreateBlogSchema}
-          onSubmit={(values) => onSubmit(initialValues, values)}
-          key={formKey}
+          onSubmit={async (values, actions) => {
+            setIsLoading(true);
+            await onSubmit(initialValues, values);
+            setIsLoading(false);
+            actions.setSubmitting(false);
+          }}
+          key={JSON.stringify(initialValues)}
         >
           {({ handleSubmit, errors, touched, setFieldValue, values }) => {
             const onDrop = (acceptedFiles: File[]) => {
@@ -78,7 +89,8 @@ const BlogForm = ({
               boxShadow: "none",
               bg: "transparent",
               fontSize: "1.2rem",
-              _placeholder: { color: "gray.400" },
+              color: "chakra-text-color",
+              _placeholder: { color: "gray.400", opacity: 0.6 },
               paddingX: "10px",
             };
 
@@ -96,7 +108,6 @@ const BlogForm = ({
                     placeholder="Blog Title"
                     fontWeight={700}
                     {...inputStyles}
-                    value={values.title}
                   />
                   <FormErrorMessage>{errors.title}</FormErrorMessage>
                 </FormControl>
@@ -114,7 +125,6 @@ const BlogForm = ({
                     resize="vertical"
                     minHeight="450px"
                     {...inputStyles}
-                    value={values.content}
                   />
                   <FormErrorMessage>{errors.content}</FormErrorMessage>
                 </FormControl>
@@ -126,10 +136,9 @@ const BlogForm = ({
                   isRequired
                 >
                   <FormLabel
-                    htmlFor="categoryId"
                     fontSize="1.2rem"
                     fontWeight="bold"
-                    color="teal.600"
+                    color="teal.400"
                     mb={2}
                   >
                     Category
@@ -142,11 +151,12 @@ const BlogForm = ({
                       border: "none",
                       fontSize: "1.2rem",
                       padding: "8px 0",
-                      background: "transparent",
-                      borderBottom: "1px solid gray",
+                      background: "var(--chakra-colors-chakra-body-bg)",
+                      color: "var(--chakra-colors-chakra-text-color)",
+                      borderBottom:
+                        "1px solid var(--chakra-colors-chakra-border-color)",
                       width: "100%",
                     }}
-                    value={values.categoryId}
                   >
                     <option value="" disabled>
                       Select a category
@@ -193,28 +203,49 @@ const BlogForm = ({
                       <p>Drag and drop an image, or click to select one</p>
                     )}
                   </Box>
-                  {touched.file && errors.file && (
-                    <FormErrorMessage>Image is required</FormErrorMessage>
-                  )}
+                  <FormErrorMessage>{errors.file}</FormErrorMessage>
                 </FormControl>
 
                 <Box
-                  position="sticky"
-                  bottom="0"
-                  bg="white"
-                  py={4}
-                  borderTop="1px solid #ddd"
-                  textAlign="center"
+                  position="fixed"
+                  bottom="20px"
+                  left="50%"
+                  transform="translateX(-50%)"
+                  bg="chakra-body-bg"
+                  py={3}
+                  px={6}
+                  borderRadius="lg"
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  gap={4}
+                  zIndex="1000"
+                  width="50%"
                 >
                   <Button
                     type="submit"
                     colorScheme="teal"
                     size="lg"
-                    width="100%"
+                    width="90%"
+                    isLoading={isLoading}
+                    loadingText="Submitting..."
+                    isDisabled={isLoading}
                   >
                     {submitButtonLabel}
                   </Button>
+                  <Button
+                    type="button"
+                    width="90%"
+                    onClick={() => window.history.back()}
+                    colorScheme="gray"
+                    size="lg"
+                    isDisabled={isLoading}
+                  >
+                    Cancel
+                  </Button>
                 </Box>
+
+                <Box height="60px" />
               </Form>
             );
           }}

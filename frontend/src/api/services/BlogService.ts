@@ -23,7 +23,7 @@ export class BlogServices {
   };
 
   deleteBlog = async (id: string) => {
-    return await BlogAppClientInstance.delete<Blog>(`blogs/delete/${id}`);
+    return await BlogAppClientInstance.delete<void>(`blogs/delete/${id}`);
   };
 
   getBlogById = async (id: string) => {

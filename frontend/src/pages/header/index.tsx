@@ -77,7 +77,7 @@ export default function DesktopNavBar() {
                 bg={"teal.600"}
                 href={"/signup"}
                 _hover={{
-                  bg: "pink.300",
+                  bg: "teal.500",
                 }}
               >
                 Sign Up
@@ -93,7 +93,7 @@ export default function DesktopNavBar() {
               bg={"teal.600"}
               href={"/"}
               _hover={{
-                bg: "pink.300",
+                bg: "teal.500",
               }}
               onClick={() => {
                 localStorage.clear();
@@ -113,11 +113,15 @@ const Navigation = () => {
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
-  const user = localStorage.getItem("user") || null;
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+
   return (
     <Stack direction={"row"} spacing={4}>
-      {NAV_ITEMS.map((navItem) =>
-        navItem.authenticated && !user ? null : (
+      {NAV_ITEMS.map((navItem) => {
+        if (navItem.authenticated && !user) return null;
+        if (navItem.roles && !navItem.roles.includes(user?.role)) return null;
+
+        return (
           <Box key={navItem.label}>
             <Popover trigger={"hover"} placement={"bottom-start"}>
               <PopoverTrigger>
@@ -155,8 +159,8 @@ const Navigation = () => {
               )}
             </Popover>
           </Box>
-        )
-      )}
+        );
+      })}
     </Stack>
   );
 };
@@ -192,7 +196,7 @@ const SubNav = ({ label, href, subLabel }: NavItem) => {
           align={"center"}
           flex={1}
         >
-          <ChevronRightIcon color={"pink.400"} w={5} h={5} />
+          <ChevronRightIcon color={"teal.400"} w={5} h={5} />
         </Flex>
       </Stack>
     </Box>
@@ -205,6 +209,7 @@ interface NavItem {
   children?: Array<NavItem>;
   href?: string;
   authenticated?: boolean;
+  roles?: string[];
 }
 
 const NAV_ITEMS: Array<NavItem> = [
@@ -244,19 +249,24 @@ const NAV_ITEMS: Array<NavItem> = [
   // },
   {
     label: "Blogs",
-    href: "/blogs",
+    href: "/",
   },
   {
     label: "My Blogs",
     href: "/my_blogs",
     authenticated: true,
+    roles: ["ROLE_USER"],
   },
   {
     label: "Write a Blog",
-    href: "/create_blog",
+    href: "/blog/create",
+    authenticated: true,
+    roles: ["ROLE_USER"],
   },
   {
-    label: "Manage Categories",
-    href: "/create_category",
+    label: "Categories",
+    href: "/categories",
+    authenticated: true,
+    roles: ["ROLE_ADMIN"],
   },
 ];

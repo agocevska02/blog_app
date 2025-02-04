@@ -11,7 +11,6 @@ import {
   Button,
   Heading,
   Text,
-  useColorModeValue,
   Link,
   useToast,
 } from "@chakra-ui/react";
@@ -50,23 +49,30 @@ const Signup = () => {
 
   return (
     <Flex
-      minH={"100vh"}
-      justify={"center"}
-      bg={useColorModeValue("gray.50", "gray.800")}
+      minH="100vh"
+      justify="center"
     >
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} width={"100%"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
+      <Stack spacing={8} mx="auto" maxW="lg" width="100%" py={12} px={6}>
+        <Stack align="center">
+          <Heading
+            fontSize="4xl"
+            textAlign="center"
+            color="chakra-text-color"
+          >
             Sign up
           </Heading>
-          <Text fontSize={"lg"} color={"gray.600"}>
+          <Text
+            fontSize="lg"
+            color="chakra-text-color"
+            opacity={0.8}
+          >
             to write your own blogs ✌️
           </Text>
         </Stack>
         <Box
-          rounded={"lg"}
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow={"lg"}
+          rounded="lg"
+          bg="chakra-body-bg"
+          boxShadow="lg"
           p={8}
         >
           <Formik
@@ -88,7 +94,7 @@ const Signup = () => {
                         isInvalid={!!errors.fullName && touched.fullName}
                         isRequired
                       >
-                        <FormLabel>Full Name</FormLabel>
+                        <FormLabel color="chakra-text-color">Full Name</FormLabel>
                         <Field
                           name="fullName"
                           as={Input}
@@ -108,7 +114,7 @@ const Signup = () => {
                     isInvalid={!!errors.email && touched.email}
                     isRequired
                   >
-                    <FormLabel>Email address</FormLabel>
+                    <FormLabel color="chakra-text-color">Email address</FormLabel>
                     <Field name="email" as={Input} type="email" />
                     {errors.email && touched.email && (
                       <Text color="red.500" fontSize="sm">
@@ -121,7 +127,7 @@ const Signup = () => {
                     isInvalid={!!errors.password && touched.password}
                     isRequired
                   >
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel color="chakra-text-color">Password</FormLabel>
                     <InputGroup>
                       <Field
                         name="password"
@@ -150,18 +156,18 @@ const Signup = () => {
                       isLoading={isSubmitting}
                       type="submit"
                       size="lg"
-                      bg={"blue.400"}
-                      color={"white"}
+                      colorScheme="teal"
+                      color="white"
                       _hover={{
-                        bg: "blue.500",
+                        opacity: 0.8,
                       }}
                     >
                       Sign up
                     </Button>
                   </Stack>
                   <Stack pt={6}>
-                    <Text align={"center"}>
-                      Already a user? <Link color={"blue.400"}>Login</Link>
+                    <Text align="center" color="chakra-text-color">
+                      Already a user? <Link color="teal.400">Login</Link>
                     </Text>
                   </Stack>
                 </Stack>

@@ -9,11 +9,13 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { CategoryService } from "@/api/services/CategoryService";
+import { useNavigate } from "react-router-dom";
 
 const AddCategoryForm = () => {
   const [categoryName, setCategoryName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
@@ -40,6 +42,7 @@ const AddCategoryForm = () => {
         isClosable: true,
       });
       setCategoryName("");
+      navigate('/categories'); // Redirect to categories list
     } catch (error) {
       toast({
         title: "Error",
