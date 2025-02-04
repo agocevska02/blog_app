@@ -98,4 +98,15 @@ public class BlogController {
         List<Blog> blogs = blogService.getBlogsByAuthorAndCategory(user, category_id);
         return ResponseEntity.ok(blogs);
     }
+
+    @GetMapping("/like/{id}")
+    public ResponseEntity<Blog> likeBlog(@PathVariable Long id) {
+        Blog blog = blogService.likeBlog(id);
+        return ResponseEntity.ok(blog);
+    }
+    @GetMapping("/dislike/{id}")
+    public ResponseEntity<Blog> dislikeBlog(@PathVariable Long id) {
+        Blog blog = blogService.dislikeBlog(id);
+        return ResponseEntity.ok(blog);
+    }
 }

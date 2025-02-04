@@ -19,7 +19,11 @@ public interface BlogService {
 
     List<Blog> getBlogsByCategoryId(Long categoryId);
 
-     List<Blog> getBlogsByAuthor(User author);
+    List<Blog> getBlogsByAuthor(User author);
 
-     List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId);
+    List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId);
+
+    Blog dislikeBlog(Long id);
+
+    Blog likeBlog(Long id);
 }

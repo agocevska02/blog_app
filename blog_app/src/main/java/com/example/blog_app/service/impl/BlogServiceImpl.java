@@ -93,4 +93,16 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId) {
         return blogRepository.findByAuthor_IdAndCategoryIdOrderByCreatedOnDesc(Long.valueOf(author.getId()), categoryId);
     }
+    public Blog likeBlog(Long id){
+        Blog blog = getBlogById(id);
+        blog.setLikes(blog.getLikes()+1);
+        blogRepository.save(blog);
+        return blog;
+    }
+    public Blog dislikeBlog(Long id){
+        Blog blog = getBlogById(id);
+        blog.setLikes(blog.getLikes()-1);
+        blogRepository.save(blog);
+        return blog;
+    }
 }

@@ -27,6 +27,7 @@ public class Blog {
     private String imageUrl;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
+    private Integer likes;
 
     public Blog(String title, String content, Category category, User user, String imageUrl) {
         this.title = title;
@@ -35,5 +36,6 @@ public class Blog {
         this.author = user;
         this.imageUrl = imageUrl;
         this.createdOn = LocalDateTime.now();
+        this.likes=0;
     }
 }
