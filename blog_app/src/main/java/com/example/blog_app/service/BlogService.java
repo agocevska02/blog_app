@@ -1,6 +1,7 @@
 package com.example.blog_app.service;
 
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.BlogLike;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
 
@@ -22,8 +23,8 @@ public interface BlogService {
     List<Blog> getBlogsByAuthor(User author);
 
     List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId);
+     Blog likeBlog(Long id, User currentUser);
 
-    Blog dislikeBlog(Long id);
-
-    Blog likeBlog(Long id);
+     Blog dislikeBlog(Long id, User currentUser);
+     boolean isLikedByUser(Long blogId, User currentUser);
 }

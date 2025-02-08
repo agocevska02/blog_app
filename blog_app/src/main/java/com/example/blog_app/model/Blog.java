@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -31,7 +33,8 @@ public class Blog {
     private PublicImage publicImage;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
-    private Integer likes;
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+    private Set<BlogLike> likes = new HashSet<>();
 
     public Blog(String title, String content, Category category, User user, String imageUrl, PublicImage publicImage) {
         this.title = title;
@@ -41,6 +44,13 @@ public class Blog {
         this.imageUrl = imageUrl;
         this.publicImage = publicImage;
         this.createdOn = LocalDateTime.now();
-        this.likes=0;
+    }
+
+    public int getLikesCount() {
+        return likes.size();
+    }
+
+    public boolean isLikedByUser(User user) {
+        return likes.stream().anyMatch(like -> like.getUser().getId().equals(user.getId()));
     }
 }

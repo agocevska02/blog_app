@@ -99,14 +99,23 @@ public class BlogController {
         return ResponseEntity.ok(blogs);
     }
 
-    @GetMapping("/like/{id}")
+    @PostMapping("/like/{id}")
     public ResponseEntity<Blog> likeBlog(@PathVariable Long id) {
-        Blog blog = blogService.likeBlog(id);
+        User user = userController.authenticatedUser().getBody();
+        Blog blog = blogService.likeBlog(id, user);
         return ResponseEntity.ok(blog);
     }
-    @GetMapping("/dislike/{id}")
+
+    @PostMapping("/dislike/{id}")
     public ResponseEntity<Blog> dislikeBlog(@PathVariable Long id) {
-        Blog blog = blogService.dislikeBlog(id);
+        User user = userController.authenticatedUser().getBody();
+        Blog blog = blogService.dislikeBlog(id, user);
         return ResponseEntity.ok(blog);
+    }
+
+    @GetMapping("/{id}/liked")
+    public ResponseEntity<Boolean> isLikedByUser(@PathVariable Long id) {
+        User user = userController.authenticatedUser().getBody();
+        return ResponseEntity.ok(blogService.isLikedByUser(id, user));
     }
 }

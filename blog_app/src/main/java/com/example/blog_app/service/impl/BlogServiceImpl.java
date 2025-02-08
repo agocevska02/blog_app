@@ -2,6 +2,7 @@ package com.example.blog_app.service.impl;
 
 import com.example.blog_app.events.BlogCreatedEvent;
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.BlogLike;
 import com.example.blog_app.model.PublicImage;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
@@ -12,12 +13,14 @@ import com.example.blog_app.service.PublicImageService;
 import com.example.blog_app.web.handler.FilesStorageController;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
@@ -128,16 +131,30 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> getBlogsByAuthorAndCategory(User author, Long categoryId) {
         return blogRepository.findByAuthor_IdAndCategoryIdOrderByCreatedOnDesc(Long.valueOf(author.getId()), categoryId);
     }
-    public Blog likeBlog(Long id){
+
+    @Override
+    public Blog likeBlog(Long id, User currentUser) {
         Blog blog = getBlogById(id);
-        blog.setLikes(blog.getLikes()+1);
-        blogRepository.save(blog);
-        return blog;
+        if (!blog.isLikedByUser(currentUser)) {
+            BlogLike like = new BlogLike();
+            like.setBlog(blog);
+            like.setUser(currentUser);
+            blog.getLikes().add(like);
+        }
+        return blogRepository.save(blog);
     }
-    public Blog dislikeBlog(Long id){
+
+    @Override
+
+    public Blog dislikeBlog(Long id, User currentUser) {
         Blog blog = getBlogById(id);
-        blog.setLikes(blog.getLikes()-1);
-        blogRepository.save(blog);
-        return blog;
+        blog.getLikes().removeIf(like -> like.getUser().getId().equals(currentUser.getId()));
+        return blogRepository.save(blog);
+    }
+    @Override
+
+    public boolean isLikedByUser(Long blogId, User currentUser) {
+        Blog blog = getBlogById(blogId);
+        return blog.isLikedByUser(currentUser);
     }
 }
