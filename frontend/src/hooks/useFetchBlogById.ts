@@ -21,7 +21,7 @@ const useFetchBlogById = (id: string) => {
     fetchBlog();
   }, [id]);
 
-  return { blog, loading, error };
+  return { blog, loading, error, setBlog };
 };
 
 export default useFetchBlogById;

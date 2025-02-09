@@ -45,6 +45,18 @@ export class BlogServices {
       `blogs/myBlogs/${categoryId}`
     );
   };
+
+  likeBlog = async (id: string) => {
+    return await BlogAppClientInstance.post<Blog>(`blogs/like/${id}`, {});
+  };
+
+  dislikeBlog = async (id: string) => {
+    return await BlogAppClientInstance.post<Blog>(`blogs/dislike/${id}`, {});
+  };
+
+  isLikedByUser = async (id: string) => {
+    return await BlogAppClientInstance.get<boolean>(`blogs/${id}/liked`);
+  };
 }
 
 export const BlogService = new BlogServices();

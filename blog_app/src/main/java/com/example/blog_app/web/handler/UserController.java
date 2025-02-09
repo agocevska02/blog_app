@@ -2,6 +2,7 @@ package com.example.blog_app.web.handler;
 
 import com.example.blog_app.model.User;
 import com.example.blog_app.service.impl.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

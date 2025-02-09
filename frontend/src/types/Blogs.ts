@@ -17,4 +17,5 @@ export type Blog = {
   imageUrl: string;
   createdOn: string;
   updatedOn: string;
+  likesCount: number;
 };

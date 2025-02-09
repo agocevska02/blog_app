@@ -6,8 +6,10 @@ import com.example.blog_app.model.BlogLike;
 import com.example.blog_app.model.PublicImage;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
+import com.example.blog_app.repository.BlogLikeRepository;
 import com.example.blog_app.repository.BlogRepository;
 import com.example.blog_app.repository.CategoryRepository;
+import com.example.blog_app.repository.UserRepository;
 import com.example.blog_app.service.BlogService;
 import com.example.blog_app.service.PublicImageService;
 import com.example.blog_app.web.handler.FilesStorageController;
@@ -20,24 +22,23 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Transactional
 public class BlogServiceImpl implements BlogService {
 
     private final BlogRepository blogRepository;
     private final CategoryRepository categoryRepository;
     private final FilesStorageController filesStorageController;
     private final FilesStorageServiceImpl filesStorageServiceImpl;
-
     private final ApplicationEventPublisher eventPublisher;
-
     private final ImageService imageService;
     private final PublicImageService publicImageService;
+    private final BlogLikeRepository blogLikeRepository;
+    private final UserRepository userRepository;
 
     public BlogServiceImpl(BlogRepository blogRepository,
                            CategoryRepository categoryRepository,
                            FilesStorageController filesStorageController,
                            FilesStorageServiceImpl filesStorageServiceImpl,
-                           ApplicationEventPublisher eventPublisher, ImageService imageService, PublicImageService publicImageService) {
+                           ApplicationEventPublisher eventPublisher, ImageService imageService, PublicImageService publicImageService, BlogLikeRepository blogLikeRepository, UserRepository userRepository) {
         this.blogRepository = blogRepository;
         this.categoryRepository = categoryRepository;
         this.filesStorageController = filesStorageController;
@@ -45,6 +46,8 @@ public class BlogServiceImpl implements BlogService {
         this.eventPublisher = eventPublisher;
         this.imageService = imageService;
         this.publicImageService = publicImageService;
+        this.blogLikeRepository = blogLikeRepository;
+        this.userRepository = userRepository;
     }
 
 
@@ -139,20 +142,25 @@ public class BlogServiceImpl implements BlogService {
             BlogLike like = new BlogLike();
             like.setBlog(blog);
             like.setUser(currentUser);
-            blog.getLikes().add(like);
+            blogLikeRepository.save(like);
+
+            blog.addLike(currentUser);
+
+            userRepository.save(currentUser);
+            blogRepository.save(blog);
         }
-        return blogRepository.save(blog);
+        return blog;
     }
 
     @Override
-
     public Blog dislikeBlog(Long id, User currentUser) {
         Blog blog = getBlogById(id);
-        blog.getLikes().removeIf(like -> like.getUser().getId().equals(currentUser.getId()));
+        blog.removeLike(currentUser);
+        userRepository.save(currentUser);
         return blogRepository.save(blog);
     }
-    @Override
 
+    @Override
     public boolean isLikedByUser(Long blogId, User currentUser) {
         Blog blog = getBlogById(blogId);
         return blog.isLikedByUser(currentUser);

@@ -17,8 +17,11 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   Box,
+  Icon,
+  Flex,
 } from "@chakra-ui/react";
 import { useRef } from "react";
+import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 interface BlogCardProps {
@@ -52,9 +55,9 @@ const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
         boxShadow="md"
         bg="chakra-body-bg"
         _hover={{
-          boxShadow: 'lg',
-          transform: 'translateY(-2px)',
-          transition: 'all 0.2s ease-in-out'
+          boxShadow: "lg",
+          transform: "translateY(-2px)",
+          transition: "all 0.2s ease-in-out",
         }}
       >
         <CardBody padding={0} display="flex" flexDirection="column">
@@ -78,24 +81,24 @@ const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
                 >
                   {blog.title}
                 </Heading>
-                <Text
-                  noOfLines={3}
-                  color="chakra-text-color"
-                  opacity={0.8}
-                >
+                <Text noOfLines={3} color="chakra-text-color" opacity={0.8}>
                   {blog.content}
                 </Text>
               </Box>
 
               <Box mt="auto">
-                <Text
-                  color="teal.400"
-                  fontSize="md"
-                  mb={4}
-                >
+                <Text color="teal.400" fontSize="md" mb={4}>
                   {blog.author?.fullName}
                 </Text>
-
+                <Flex justifyContent={"start"} alignItems={"center"} marginBottom={2}>
+                  <Icon
+                    as={FaHeart}
+                    color={"red.500"}
+                    cursor="pointer"
+                    _hover={{ color: "red.400" }}
+                  />
+                  <Text marginLeft={"2"}>{blog.likesCount}</Text>
+                </Flex>
                 <ButtonGroup spacing={2}>
                   <Button
                     variant="solid"

@@ -18,6 +18,7 @@ public class BlogController {
 
     private final BlogService blogService;
     private final UserController userController;
+
     public BlogController(BlogService blogService, UserController userController) {
         this.blogService = blogService;
         this.userController = userController;
@@ -28,7 +29,7 @@ public class BlogController {
         return blogService.getAllBlogs();
     }
 
-    @PostMapping(value="/add", consumes = "multipart/form-data")
+    @PostMapping(value = "/add", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Blog> addBlog(
             @RequestParam("title") String title,
@@ -62,12 +63,12 @@ public class BlogController {
                                            @RequestParam("content") String content,
                                            @RequestParam("categoryId") Long categoryId,
                                            @RequestParam(value = "file", required = false) MultipartFile file
-                                           ) {
+    ) {
         BlogDto blogDto = new BlogDto();
         blogDto.setTitle(title);
         blogDto.setContent(content);
         blogDto.setCategoryId(categoryId);
-        if(file!=null){
+        if (file != null) {
             blogDto.setFile(file);
         }
 
@@ -92,6 +93,7 @@ public class BlogController {
         List<Blog> blogs = blogService.getBlogsByAuthor(user);
         return ResponseEntity.ok(blogs);
     }
+
     @GetMapping("/myBlogs/{category_id}")
     public ResponseEntity<List<Blog>> getMyBlogsByCategoryId(@PathVariable Long category_id) {
         User user = userController.authenticatedUser().getBody();
@@ -100,13 +102,15 @@ public class BlogController {
     }
 
     @PostMapping("/like/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Blog> likeBlog(@PathVariable Long id) {
-        User user = userController.authenticatedUser().getBody();
-        Blog blog = blogService.likeBlog(id, user);
+        ResponseEntity<User> user = userController.authenticatedUser();
+        Blog blog = blogService.likeBlog(id, user.getBody());
         return ResponseEntity.ok(blog);
     }
 
     @PostMapping("/dislike/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Blog> dislikeBlog(@PathVariable Long id) {
         User user = userController.authenticatedUser().getBody();
         Blog blog = blogService.dislikeBlog(id, user);
@@ -114,6 +118,7 @@ public class BlogController {
     }
 
     @GetMapping("/{id}/liked")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Boolean> isLikedByUser(@PathVariable Long id) {
         User user = userController.authenticatedUser().getBody();
         return ResponseEntity.ok(blogService.isLikedByUser(id, user));
