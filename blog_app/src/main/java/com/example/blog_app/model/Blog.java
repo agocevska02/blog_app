@@ -2,10 +2,14 @@ package com.example.blog_app.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -36,17 +40,7 @@ public class Blog {
     @ManyToMany(mappedBy = "likedBlogs")
     @JsonManagedReference
     private Set<User> likes = new HashSet<>();
-    
-    public void addLike(User user) {
-        this.likes.add(user);
-        user.getLikedBlogs().add(this);
-    }
 
-    public void removeLike(User user){
-        this.likes.removeIf(like -> like.getId().equals(user.getId()));
-        user.getLikedBlogs().remove(this);
-    }
-    
     public Blog(String title, String content, Category category, User user, String imageUrl, PublicImage publicImage) {
         this.title = title;
         this.content = content;
@@ -57,6 +51,16 @@ public class Blog {
         this.createdOn = LocalDateTime.now();
     }
 
+    public void addLike(User user) {
+        this.likes.add(user);
+        user.getLikedBlogs().add(this);
+    }
+
+    public void removeLike(User user) {
+        user.getLikedBlogs().remove(this);
+        this.likes.remove(user);
+    }
+
     public int getLikesCount() {
         return likes.size();
     }
@@ -64,4 +68,18 @@ public class Blog {
     public boolean isLikedByUser(User user) {
         return likes.stream().anyMatch(like -> like.getId().equals(user.getId()));
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Blog blog = (Blog) o;
+        return Objects.equals(id, blog.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }

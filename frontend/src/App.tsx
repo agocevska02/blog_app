@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 import LatestBlogs from "./pages/blogs";
 import ProtectedRoute from "./routes/ProtectedRoute";
@@ -7,11 +6,12 @@ import Header from "./pages/header";
 import CreateBlog from "./pages/blogs/components/createBlog";
 import AddCategoryPage from "./pages/categories/addCategoryPage";
 import EditBlog from "./pages/blogs/components/editBlog";
-import SignIn from "./pages/authentication/signIn";
-import Signup from "./pages/authentication/signup";
 import BlogDetails from "./pages/blogs/components/blogDetails";
 import { BlogProvider } from "./contexts/BlogContext";
 import ListCategories from "./pages/categories/ListCategories";
+import MyLikes from "./pages/blogs/components/myLikes";
+import SignIn from "./pages/authentication/SignIn";
+import Signup from "./pages/authentication/Signup";
 
 function App() {
   return (
@@ -59,6 +59,12 @@ function App() {
                     Component={LatestBlogs}
                     roles={["ROLE_USER", "ROLE_ADMIN"]}
                   />
+                }
+              />
+              <Route
+                path="/my_likes"
+                element={
+                  <ProtectedRoute Component={MyLikes} roles={["ROLE_USER"]} />
                 }
               />
               <Route

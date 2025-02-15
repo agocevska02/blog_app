@@ -57,6 +57,10 @@ export class BlogServices {
   isLikedByUser = async (id: string) => {
     return await BlogAppClientInstance.get<boolean>(`blogs/${id}/liked`);
   };
+
+  getLikedBlogsByUser = async () => {
+    return await BlogAppClientInstance.get<Blog[]>(`blogs/likedByUser`);
+  };
 }
 
 export const BlogService = new BlogServices();

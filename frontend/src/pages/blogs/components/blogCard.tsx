@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 interface BlogCardProps {
   blog: Blog;
   isMyBlog?: boolean;
-  onDelete: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
@@ -38,7 +38,9 @@ const BlogCard = ({ blog, isMyBlog, onDelete }: BlogCardProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleDelete = () => {
-    onDelete(blog.id);
+    if (onDelete) {
+      onDelete(blog.id);
+    }
     onClose();
   };
 

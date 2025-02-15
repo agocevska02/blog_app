@@ -15,10 +15,6 @@ export class AuthenticationService {
       loginDto
     );
   };
-
-  //   async logoutUser(): Promise<User> {
-  //     return await BlogAppClientInstance.get<User>(`auth/logout`);
-  //   }
 }
 
 export const AuthService = new AuthenticationService();

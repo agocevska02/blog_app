@@ -1,8 +1,10 @@
 package com.example.blog_app.web.handler;
 
 import com.example.blog_app.model.Blog;
+import com.example.blog_app.model.BlogLike;
 import com.example.blog_app.model.User;
 import com.example.blog_app.model.dto.BlogDto;
+import com.example.blog_app.service.BlogLikeService;
 import com.example.blog_app.service.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,12 @@ public class BlogController {
 
     private final BlogService blogService;
     private final UserController userController;
+    private final BlogLikeService blogLikeService;
 
-    public BlogController(BlogService blogService, UserController userController) {
+    public BlogController(BlogService blogService, UserController userController, BlogLikeService blogLikeService) {
         this.blogService = blogService;
         this.userController = userController;
+        this.blogLikeService = blogLikeService;
     }
 
     @GetMapping
@@ -122,5 +126,14 @@ public class BlogController {
     public ResponseEntity<Boolean> isLikedByUser(@PathVariable Long id) {
         User user = userController.authenticatedUser().getBody();
         return ResponseEntity.ok(blogService.isLikedByUser(id, user));
+    }
+
+    @GetMapping("/likedByUser")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<Blog>> getLikedBlogsByUser(){
+        User user = userController.authenticatedUser().getBody();
+        List<BlogLike> blogLikedByUser = blogLikeService.getBlogLikeByUser(user);
+        List<Blog> blogs = blogLikedByUser.stream().map(BlogLike::getBlog).toList();
+        return ResponseEntity.ok(blogs);
     }
 }

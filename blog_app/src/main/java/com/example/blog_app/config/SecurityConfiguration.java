@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/api/blogs/like/**").hasRole("USER")
                         .requestMatchers("/api/blogs/dislike/**").hasRole("USER")
                         .requestMatchers("/api/blogs/*/liked").hasRole("USER")
+                        .requestMatchers("/api/blogs/likedByUser").hasRole("USER")
                         .requestMatchers("/api/categories/add").hasRole("ADMIN")
                         .requestMatchers("/api/categories/delete/**").hasRole("ADMIN")
                         .requestMatchers("/api/categories/update/**").hasRole("ADMIN")

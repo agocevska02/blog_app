@@ -42,7 +42,7 @@ const AddCategoryForm = () => {
         isClosable: true,
       });
       setCategoryName("");
-      navigate('/categories'); // Redirect to categories list
+      navigate('/categories');
     } catch (error) {
       toast({
         title: "Error",

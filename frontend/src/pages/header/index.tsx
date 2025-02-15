@@ -12,6 +12,7 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useColorMode,
+  Image,
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
@@ -34,14 +35,14 @@ export default function DesktopNavBar() {
         align={"center"}
       >
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
-          <Text
+          <Box
             textAlign={useBreakpointValue({ base: "center", md: "left" })}
             fontFamily={"heading"}
             color={useColorModeValue("gray.800", "white")}
             onClick={() => (window.location.href = "/")}
           >
-            Logo
-          </Text>
+            <Image src="src\assets\logo.svg" alt="logo" boxSize="50px" />
+          </Box>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
             <Navigation />
@@ -116,7 +117,7 @@ const Navigation = () => {
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
   return (
-    <Stack direction={"row"} spacing={4}>
+    <Stack direction={"row"} spacing={4} alignItems={"center"}>
       {NAV_ITEMS.map((navItem) => {
         if (navItem.authenticated && !user) return null;
         if (navItem.roles && !navItem.roles.includes(user?.role)) return null;
@@ -213,49 +214,26 @@ interface NavItem {
 }
 
 const NAV_ITEMS: Array<NavItem> = [
-  // {
-  //   label: "Inspiration",
-  //   children: [
-  //     {
-  //       label: "Explore Design Work",
-  //       subLabel: "Trending Design to inspire you",
-  //       href: "#",
-  //     },
-  //     {
-  //       label: "New & Noteworthy",
-  //       subLabel: "Up-and-coming Designers",
-  //       href: "#",
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: "Find Work",
-  //   children: [
-  //     {
-  //       label: "Job Board",
-  //       subLabel: "Find your dream design job",
-  //       href: "#",
-  //     },
-  //     {
-  //       label: "Freelance Projects",
-  //       subLabel: "An exclusive list for contract work",
-  //       href: "#",
-  //     },
-  //   ],
-  // },
-  // {
-  //   label: "Learn Design",
-  //   href: "#",
-  // },
   {
     label: "Blogs",
     href: "/",
   },
   {
-    label: "My Blogs",
-    href: "/my_blogs",
-    authenticated: true,
-    roles: ["ROLE_USER"],
+    label: "My Profile",
+    children: [
+      {
+        label: "My Blogs",
+        href: "/my_blogs",
+        authenticated: true,
+        roles: ["ROLE_USER"],
+      },
+      {
+        label: "My Likes",
+        href: "/my_likes",
+        authenticated: true,
+        roles: ["ROLE_USER"],
+      },
+    ],
   },
   {
     label: "Write a Blog",

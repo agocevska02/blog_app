@@ -29,9 +29,6 @@ public class ImageService {
         config.setPrivateKey(privateKey);
         config.setPublicKey(publicKey);
         config.setUrlEndpoint(urlEndpoint);
-        System.out.println("Using ImageKit Config:");
-        System.out.println("Public Key: " + publicKey);
-        System.out.println("URL Endpoint: " + urlEndpoint);
 
         imageKit.setConfig(config);
     }
