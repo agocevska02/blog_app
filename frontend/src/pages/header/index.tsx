@@ -12,10 +12,10 @@ import {
   useColorModeValue,
   useBreakpointValue,
   useColorMode,
-  Image,
 } from "@chakra-ui/react";
 import { ChevronRightIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import Logo from "@/assets/logo";
 
 export default function DesktopNavBar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -41,7 +41,7 @@ export default function DesktopNavBar() {
             color={useColorModeValue("gray.800", "white")}
             onClick={() => (window.location.href = "/")}
           >
-            <Image src="src\assets\logo.svg" alt="logo" boxSize="50px" />
+            <Logo />
           </Box>
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
